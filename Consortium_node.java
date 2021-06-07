@@ -31,7 +31,7 @@ public class Consortium_node extends Thread {
 		
 		node_info node_list = new node_info();
 		
-		blockchain chain = new blockchain();
+		BlockChain chain = new BlockChain();
 	}
 
 }
