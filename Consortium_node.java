@@ -14,6 +14,8 @@ public class Consortium_node extends Thread {
 			while(true) {
 				//Thread.sleep(10);
 				//WAN 통신 대기
+				System.out.println("Starting CONSORTIUM NODE...");
+				
 				//msg_receive(i);
 				//msg_send(i);
 			}
@@ -49,6 +51,7 @@ public class Consortium_node extends Thread {
 			System.out.println(e.getMessage());
 		}
 	}
+	
 	
 	
 	private void msg_send(NetworkEndPoint i) {
