@@ -2,7 +2,7 @@
 public class MemberNode extends Thread{
 	private Block block;
 	private Wallet wallet;
-	private MemberNetworkEndpoint networkendpoint;
+	private NetworkEndpoint networkendpoint;
 	
 	public void run() {
 		NetworkEndPoint i = null;
@@ -16,7 +16,7 @@ public class MemberNode extends Thread{
 			
 			while(true) {
 				//Thread.sleep(10);
-				//WAN Åë½Å ´ë±â
+				//WAN ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 				System.out.println("Starting MEMBER NODE...");
 				
 				//msg_receive(i);
