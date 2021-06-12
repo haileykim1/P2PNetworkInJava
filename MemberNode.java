@@ -1,8 +1,7 @@
-
 public class MemberNode extends Thread{
 	private Block block;
 	private Wallet wallet;
-	private NetworkEndpoint networkendpoint;
+	private NetworkEndPoint networkendpoint;
 	
 	public void run() {
 		NetworkEndPoint i = null;
@@ -34,5 +33,4 @@ public class MemberNode extends Thread{
 		
 		th.start();
 	}
-	
 }

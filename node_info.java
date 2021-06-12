@@ -1,42 +1,50 @@
+import java.util.HashMap;
 
 public class node_info {
-	static String[] node_list;
-	static int MAX = 100;
-	
+	//id를 넣으면 ip를 반환
+	static HashMap<String,String> node_list = new HashMap();
+			
 	node_info() {
-		node_list = new String[MAX];
-		//Memeber_Node [] node_list = new Member_Node[MAX];
+		
+		System.out.println("node_info Start..");
+		//MemeberNode [] node_list = new MemberNode[MAX];
 	}
 	
-	public static int enrol(String node /*Memeber_Node node*/) {
-		for(int i = 0;i < MAX; i++) {
-			if(node_list[i] == null) {
-				node_list[i] = node;
-				return 0;
-			}
+	public static void enrol(String id, String ip /*Memeber_Node node*/) {
+
+		if(node_list.get(id) == null) {
+			node_list.put(id, ip);
+			System.out.println("node_info : enrol succuess");
+
 		}
-		System.out.println("node_info Error : node_list is full");
-		return -1;
+		else {
+			System.out.println("node_info : enrol fail : id reduplication");
+		}
+		
 	}
 	
-	public static String select(String name) {
-		for(int i = 0;i < MAX; i++) {
-			if(node_list[i] == name) {
-				return node_list[i];
-			}
+	public static String select(String id) {
+		
+		String ip = node_list.get(id);
+		if(ip == null) {
+
+			System.out.println("node_info : select fail : this id has no ip");
+			return null;
 		}
-		System.out.println("node_info Error : no node in node_list");
-		return "null";
+		System.out.println("node_info : select succuess : " + ip);
+		return ip;
 	}
 	
-	public static int delete(String name) {
-		for(int i = 0;i < MAX; i++) {
-			if(node_list[i] == name) {
-				node_list[i] = null;
-				return 0;
-			}
+	public static int delete(String id) {
+
+		String ip = node_list.get(id);
+		if(ip == null) {
+
+			System.out.println("node_info : select fail : this id has no ip");
+			return -1;
 		}
-		System.out.println("node_info Error : no node in node_list");
-		return -1;
+		node_list.remove(id);
+		System.out.println("node_info : delete succuess : " + id);
+		return 0;
 	}
 }

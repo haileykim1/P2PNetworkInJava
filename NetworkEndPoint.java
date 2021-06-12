@@ -4,24 +4,30 @@ import java.net.*;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.jsoup.*;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-//ㅎㅇ : 175.208.245.129
-//ㅇㅇ : 221.167.222.167
-//ㅅㅇ : 59.13.228.230
+
+
+//wan port : 30001
+//lan port : 7070
 
 public class NetworkEndPoint {
 	//return 형식은 보낸 IP/PORT/DATA
-	static String MyWanIP;
+	
+	static String HeeEul = "175.208.245.129";
+	static String YeIn = "221.167.222.167";
+	static String SoYang = "59.13.228.230";
+	
+	static String IP;
 	static int snd_port = 30001;
 	static int rcv_port = 30001;
 
 	
 	NetworkEndPoint() throws Exception {
 		System.out.println("Connection start...");
+	}
+	
+	NetworkEndPoint(String ip){
+		IP = ip;
 	}
 	
 	private void msg_receive() {
@@ -37,6 +43,10 @@ public class NetworkEndPoint {
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public void set_IP(String s) {
+		IP = s;
 	}
 	
 	
@@ -84,7 +94,7 @@ public class NetworkEndPoint {
 		Socket socket = null;
 		//System.out.println("1");
 		try {
-			socket = new Socket(MyWanIP/*"localhost"*/, port);
+			socket = new Socket(IP/*"localhost"*/, port);
 			OutputStream out = socket.getOutputStream();
 			out.write(s.getBytes());
 			System.out.println("Socket : " + socket.getInputStream());
