@@ -1,7 +1,13 @@
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.SecureRandom;
 import java.security.Security;
+import java.security.spec.ECGenParameterSpec;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.security.*;
+import java.security.spec.ECGenParameterSpec;
 
 public class BlockChain {
     public static ArrayList<Block> blockchain = new ArrayList<Block>();
@@ -9,7 +15,45 @@ public class BlockChain {
     public static float minimumTransaction = 0.1f;
     public static int difficulty = 3;
     public static Transaction genesisTransaction;
-    public static Wallet genesisWallet;
+
+
+    public BlockChain(){
+        try{
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDSA","BC");
+            SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+            ECGenParameterSpec ecSpec = new ECGenParameterSpec("prime192v1");
+            // Initialize the key generator and generate a KeyPair
+            keyGen.initialize(ecSpec, random); //256
+            KeyPair keyPair = keyGen.generateKeyPair();
+            // Set the public and private keys from the keyPair
+            PrivateKey privateKey = keyPair.getPrivate();
+            PublicKey publicKey = keyPair.getPublic();
+
+            KeyPairGenerator keyGen2 = KeyPairGenerator.getInstance("ECDSA","BC");
+            SecureRandom random2 = SecureRandom.getInstance("SHA1PRNG");
+            ECGenParameterSpec ecSpec2 = new ECGenParameterSpec("prime192v1");
+            // Initialize the key generator and generate a KeyPair
+            keyGen.initialize(ecSpec2, random2); //256
+            KeyPair keyPair2 = keyGen.generateKeyPair();
+            // Set the public and private keys from the keyPair
+            PrivateKey privateKey2 = keyPair.getPrivate();
+            PublicKey publicKey2 = keyPair.getPublic();
+
+            genesisTransaction = new Transaction(publicKey, publicKey2, 100f, null);
+            genesisTransaction.generateSignature(privateKey);
+            genesisTransaction.transactionId = "0";
+            genesisTransaction.outputs.add(new TransactionOutput(genesisTransaction.recipient, genesisTransaction.value, genesisTransaction.transactionId));
+            UTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0));
+            Block genesisBlock = new Block("0", 1623486340582);
+            genesisBlock.addTransaction(genesisTransaction);
+            addBlock(genesisBlock);
+
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+
+
+    }
 
     public static Boolean isChainValid() {
         Block currentBlock;
@@ -73,11 +117,11 @@ public class BlockChain {
                     tempUTXOs.put(output.id, output);
                 }
 
-                if( currentTransaction.outputs.get(0).reciepient != currentTransaction.reciepient) {
+                if( currentTransaction.outputs.get(0).recipient != currentTransaction.recipient) {
                     System.out.println("#Transaction(" + t + ") output reciepient is not who it should be");
                     return false;
                 }
-                if( currentTransaction.outputs.get(1).reciepient != currentTransaction.sender) {
+                if( currentTransaction.outputs.get(1).recipient != currentTransaction.sender) {
                     System.out.println("#Transaction(" + t + ") output 'change' is not sender.");
                     return false;
                 }
@@ -97,6 +141,5 @@ public class BlockChain {
     public static void setDifficulty(int difficulty){
         difficulty = difficulty;
     }
-
 
 }

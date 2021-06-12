@@ -10,7 +10,7 @@ public class Wallet {
 	public PrivateKey privateKey;
 	public PublicKey publicKey;
 
-	public HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
+	public HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>(); //String에는 뭐가 들어가는지..?
 
 	public Wallet() {
 		generateKeyPair();
