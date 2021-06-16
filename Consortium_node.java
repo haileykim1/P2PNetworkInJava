@@ -79,7 +79,7 @@ try {
 */
 
 public class Consortium_node{
-	
+	node_info node_storage;
 
 	
 	public static void main(String[] args) throws Exception{
@@ -89,7 +89,7 @@ public class Consortium_node{
 		
 		broker_node bk_node = new broker_node();
 		
-		node_info node_list = new node_info();
+		node_storage = new node_info();
 		
 		BlockChain chain = new BlockChain();
 		
@@ -129,7 +129,7 @@ public class Consortium_node{
 			boolean flag = true;
 			while(flag) {
 				String msg = bufferedReader.readLine();
-				if(msg.equals("exit"))){
+				if(msg.equals("exit")){
 					flag = false;
 					break;
 				}else {
