@@ -9,11 +9,15 @@ public class Block {
 	public long timeStamp; //as number of milliseconds since 1/1/1970.
 	public int nonce;
 	
-	//Block Constructor.  
-	public Block(String previousHash ) {
+	//Block Constructor.
+	public Block (String previousHash, long time){ //only used for genesis block
+		this.previousHash = previousHash;
+		this.timeStamp = time;
+		this.hash = calculateHash();
+	}
+	public Block(String previousHash) {
 		this.previousHash = previousHash;
 		this.timeStamp = new Date().getTime();
-		
 		this.hash = calculateHash(); //Making sure we do this after we set the other values.
 	}
 	
@@ -22,12 +26,12 @@ public class Block {
 		String calculatedhash = StringUtil.applySha256( 
 				previousHash +
 				Long.toString(timeStamp) +
-				Integer.toString(nonce) + 
+				Integer.toString(nonce) +
 				merkleRoot
 				);
 		return calculatedhash;
 	}
-	
+
 	//Increases nonce value until hash target is reached.
 	public void mineBlock(int difficulty) {
 		merkleRoot = StringUtil.getMerkleRoot(transactions);
