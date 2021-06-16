@@ -2,10 +2,12 @@
 public class MemberNode extends Thread{
 	private Block block;
 	private Wallet wallet;
-	private MemberNetworkEndpoint networkendpoint;
+	private NetworkEndPoint networkendpoint;
+	
 	
 	public void run() {
 		NetworkEndPoint i = null;
+			
 		try {
 			i = new NetworkEndPoint();
 		} catch (Exception e1) {

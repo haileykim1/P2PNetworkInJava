@@ -1,7 +1,10 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.Socket;
 
-public class Consortium_node extends Thread {
+public class Consortium_node{
 	
-	public void run() {
+	/*public void run() {
 		NetworkEndPoint i = null;
 		try {
 			i = new NetworkEndPoint();
@@ -22,11 +25,11 @@ public class Consortium_node extends Thread {
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
-	}
+	}*/
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
-		Consortium_node th = new Consortium_node();
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 		
 		broker_node bk_node = new broker_node();
 		
@@ -34,33 +37,31 @@ public class Consortium_node extends Thread {
 		
 		BlockChain chain = new BlockChain();
 		
-		th.start();
+		ServerThread serverThread = new ServerThread(30001);
+		
+		serverThread.start();
+		
+		new Consortium_node().pullFromPeers(bufferedReader, serverThread);
 	}
 	
-	private void msg_receive(NetworkEndPoint i) {
-		
-		try {
-			
-			while(true) {
+	public void pullFromPeers(BufferedReader bufferedReader, ServerThread serverThread) throws Exception{
 
-				System.out.println("--Receive");
-				String s = i.wan_receive(7070);
-				System.out.println(s);
-			}
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-	
-	
-	
-	private void msg_send(NetworkEndPoint i) {
+		//peer ip주소 배열
+		String[] peers = new String[2];
+		peers[0] = "175.208.245.129";
+		peers[1] = "221.167.222.167";
 		
-		try {
-			System.out.println("--Sender");
-			i.wan_send("nice to meet you",7070);
-		} catch (Exception e) {
-			e.printStackTrace();
+		for(int i = 0; i < peers.length; ++i) {
+			Socket socket = null;
+			try {
+				socket = new Socket(peers[i], 30001);
+				new PeerThread(socket, peers[i]).start();
+			} catch(Exception e) {
+				if(socket != null)
+					socket.close();
+				else
+					System.out.println("Invalid Input");
+			}
 		}
 	}
 

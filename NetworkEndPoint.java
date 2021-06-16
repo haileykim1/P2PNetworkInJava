@@ -21,7 +21,7 @@ public class NetworkEndPoint {
 
 	
 	NetworkEndPoint() throws Exception {
-		System.out.println("Connection start...");
+		System.out.println("NetworkEndPoint start...");
 	}
 	
 	private void msg_receive() {
