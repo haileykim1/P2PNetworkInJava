@@ -124,5 +124,22 @@ public class Consortium_node{
 	}
 	public void communicate(BufferedReader bufferedReader, ServerThread serverThread) {
 		//msg snd interface
+		try {
+			System.out.println(">> Send Message");
+			boolean flag = true;
+			while(flag) {
+				String msg = bufferedReader.readLine();
+				if(msg.equals("exit"))){
+					flag = false;
+					break;
+				}else {
+					serverThread.sendMessage(msg);
+				}
+			}
+			System.exit(0);
+			
+		}catch(Exception e) {
+			
+		}
 	}
 }
