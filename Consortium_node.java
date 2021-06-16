@@ -63,6 +63,11 @@ public class Consortium_node{
 					System.out.println("Invalid Input");
 			}
 		}
+		communicate(bufferedReader, serverThread);
 	}
 
+	
+	public void communicate(BufferedReader bufferedReader, ServerThread serverThread) {
+		//msg snd interface
+	}
 }
