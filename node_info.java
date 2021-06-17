@@ -10,12 +10,15 @@ public class node_info {
 		//MemeberNode [] node_list = new MemberNode[MAX];
 	}
 	
-	public static void enrol(String id, String ip /*Memeber_Node node*/) {
+	public static void enrol(MemberInfo memberInfo) {
 
-		if(node_list.get(id) == null) {
-			node_list.put(id, ip);
+		//Membernode에 관한 정보 필요. -> 이름, 잔액 등 mem
+		
+		if(node_list.get(memberInfo.getId()) == null) {
+			node_list.put(memberInfo.getId(), memberInfo.getId());
 			System.out.println("node_info : enrol succuess");
 
+			
 		}
 		else {
 			System.out.println("node_info : enrol fail : id reduplication");
