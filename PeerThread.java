@@ -15,15 +15,15 @@ public class PeerThread extends Thread{
 	
 	public void run() {
 		boolean flag = true;
+		System.out.println("PeerThread Start..." + ipStr);
 		while(flag) {
+			System.out.println("iteration");
 			try {
-				StringBuilder sb = new StringBuilder();
 				String line;
 				while((line = bufferedReader.readLine())!= null) {
-					sb.append(line);
+					System.out.println("[" + ipStr + "] : " + line);
 				}
 				
-				System.out.println("[" + ipStr + "] : " + sb.toString());
 				
 			}catch(Exception e) {
 				flag = false;

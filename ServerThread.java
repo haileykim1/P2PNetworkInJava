@@ -37,4 +37,14 @@ public class ServerThread extends Thread{
 	public Set<ServerThreadStream> getServerThreadStreams(){
 		return serverThreadStreams;
 	}
+	
+	public void closeSocket() {
+		System.out.println("serverSocket Close..");
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

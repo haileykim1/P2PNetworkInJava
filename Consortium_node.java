@@ -39,7 +39,7 @@ public class Consortium_node{
 		for(int i = 0; i < peers.length; ++i) {
 			Socket socket = null;
 			try {
-				socket = new Socket(peers[i], 30002);
+				socket = new Socket(peers[i], 30006);
 				new PeerThread(socket, peers[i]).start();
 			} catch(Exception e) {
 				if(socket != null)
@@ -60,11 +60,11 @@ public class Consortium_node{
 			System.out.println(">> Send Message");
 			boolean flag = true;
 			while(flag) {
-				System.out.print(">>");
 				String msg = bufferedReader.readLine();
 				if(msg.equals("exit")){
 					flag = false;
 					System.out.println("Consortium Node Exit...");
+					serverThread.closeSocket();
 					break;
 				}else {
 					serverThread.sendMessage(msg);
