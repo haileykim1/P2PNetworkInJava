@@ -13,6 +13,7 @@ public class ServerThread extends Thread{
 	}
 	
 	public void run() {
+		System.out.println("ServerThread Start...");
 		try {
 			while(true) {
 				ServerThreadStream serverThreadStream = new ServerThreadStream(serverSocket.accept(), this);
