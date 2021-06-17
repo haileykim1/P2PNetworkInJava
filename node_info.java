@@ -3,11 +3,23 @@ import java.util.HashMap;
 public class node_info {
 	//id를 넣으면 ip를 반환
 	static HashMap<String,String> node_list = new HashMap();
+	
 			
 	node_info() {
 		
 		System.out.println("node_info Start..");
 		//MemeberNode [] node_list = new MemberNode[MAX];
+	}
+	
+	public static void enrolConsortium(String id, String ip) {
+		if(node_list.get(id) == null) {
+			node_list.put(id, ip);
+			System.out.println("node_info : enrol succuess");
+			
+		}
+		else {
+			System.out.println("node_info : enrol fail : id reduplication");
+		}
 	}
 	
 	public static void enrol(MemberInfo memberInfo) {
@@ -17,7 +29,6 @@ public class node_info {
 		if(node_list.get(memberInfo.getId()) == null) {
 			node_list.put(memberInfo.getId(), memberInfo.getId());
 			System.out.println("node_info : enrol succuess");
-
 			
 		}
 		else {
