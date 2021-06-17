@@ -44,7 +44,7 @@ public class BlockChain {
             genesisTransaction.transactionId = "0";
             genesisTransaction.outputs.add(new TransactionOutput(genesisTransaction.recipient, genesisTransaction.value, genesisTransaction.transactionId));
             UTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0));
-            Block genesisBlock = new Block("0", 1623486340);
+            Block genesisBlock = new Block("0", 1623486340582);
             genesisBlock.addTransaction(genesisTransaction);
             addBlock(genesisBlock);
 
