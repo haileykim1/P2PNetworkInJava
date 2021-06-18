@@ -21,6 +21,8 @@ public class broker_node extends Thread{
 	Socket socket;
 	ObjectInputStream oin;
 	ObjectOutputStream oout;
+	static String consortiumName = "";
+	int cnt = 0;
 	
 	public void run(){
 		System.out.println("Broker Node start...");
@@ -57,7 +59,8 @@ public class broker_node extends Thread{
 				else if(data instanceof Block) {
 					System.out.println("Object : Block");
 					//Blockchain에 등록
-					chain.addBlock((Block)data);
+					
+					oout.writeObject(chain.addBlock((Block)data));
 				}
 				else if(data instanceof ConsortiumInfo) {
 					System.out.println("Object : Consortium");
@@ -99,8 +102,19 @@ public class broker_node extends Thread{
 					}
 				}
 				else if(data instanceof String) {
-					System.out.println("Object : String -> DELETE");
-					node_storage.delete((String)data);
+					String str = (String)data;
+					if(data.equals("HASH")) {
+						System.out.println("Membernode needs prevHash value");
+						oout.writeObject(chain.getPreviousHash());
+					}else if(data.equals("ID")) {
+						System.out.println("Membernode needs ID value");
+						oout.writeObject((String)(consortiumName + (++cnt)));
+					}
+					else {
+
+						System.out.println("Object : String -> DELETE");
+						node_storage.delete((String)data);
+					}
 				}
 				
 				else {
@@ -108,35 +122,7 @@ public class broker_node extends Thread{
 				}
 				
 					
-				/*
 				
-				
-				case "TRANSACTION":
-					//해당 string 분석해서 맞는 컨소시움에 보내주기
-					//해당 컨소시움으로 보내주고 Consortium node에서 받아서 찾고 금액 반영
-					//WAN_TRANSACTION :type#Myip#sender_node_id#price
-					String sender_node = msg[1];
-					node_id = msg[2];
-					String price = msg[3];
-					String receive_node = node_storage.select(node_id);
-					if(receive_node == null) {
-						String[] consortium_ip = {i.HeeEul, i.YeIn, i.SoYang};
-						String MyWanIP = find_MyWanIP();
-						for(int k = 0; k < 3; k++) {
-							if(MyWanIP == consortium_ip[k]) {
-								continue;
-							}
-							i.set_IP(consortium_ip[k]);
-							i.wan_send("WAN_TRANSACTION#" + MyWanIP + "#" + sender_node + "#price", 7070);
-						}
-					}
-					else {
-						//이건 membernode 쪽에 message 받기 해주어야 함.
-						i.set_IP(receive_node);
-						i.wan_send("TRANSCATION#" + sender_node + "#price", 7070);
-					}
-					
-				}*/	
 				
 				oout.close();
 				oin.close();
@@ -152,10 +138,11 @@ public class broker_node extends Thread{
 	}
 	
 	//broker_node를 생성했을 때부터 local message 대기
-	broker_node(node_info node_storage, int my_port, BlockChain chain) {
+	broker_node(node_info node_storage, int my_port, BlockChain chain, String name) {
 		this.node_storage = node_storage;
 		this.my_port = my_port;
 		this.chain = chain;
+		this.consortiumName = name;
 		this.start();
 	}
 	

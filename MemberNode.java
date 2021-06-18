@@ -25,8 +25,7 @@ public class MemberNode {
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 			//ID등록
-			System.out.println(">> Enter your ID");
-			ID = bufferedReader.readLine();
+			ID = getID();
 			wallet = new Wallet(ID);
 			memberInfo = new MemberInfo(wallet);
 			memberInfo.setId(ID);
@@ -56,8 +55,8 @@ public class MemberNode {
 				//Block 채굴
 				
 				//이전 해시 값
-				String prevHash = "prev";
-				int difficulty = 4;
+				String prevHash = getPrevHash();
+				int difficulty = 3;
 				Block block = new Block(prevHash);
 				block.mineBlock(difficulty);
 				
@@ -78,6 +77,58 @@ public class MemberNode {
 			System.out.println(e.getMessage());
 		}
 		
+	}
+	private static String getID() {
+		String ret = "";
+		try {
+			consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
+			ObjectOutputStream out = new ObjectOutputStream(consortiumSocket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(consortiumSocket.getInputStream());
+			
+			out.writeObject("ID");
+			
+			
+			ret = (String)in.readObject();
+			
+		}catch(Exception e) {
+			System.out.println(e);
+		}finally {
+			try {
+				
+				consortiumSocket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return ret;
+		
+	}
+	private static String getPrevHash() {
+		String ret = "";
+		
+		try {
+			consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
+			ObjectOutputStream out = new ObjectOutputStream(consortiumSocket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(consortiumSocket.getInputStream());
+			
+			out.writeObject("HASH");
+			
+			ret = (String)in.readObject();
+			
+		}catch(Exception e) {
+			System.out.println(e);
+		}finally {
+			try {
+				
+				consortiumSocket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return ret;
 	}
 	
 	private static boolean EnrolMemberNode() {

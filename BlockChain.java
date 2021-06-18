@@ -141,9 +141,14 @@ public class BlockChain {
         return true;
     }
 
-    public static void addBlock(Block newBlock) {
-        newBlock.mineBlock(difficulty);
-        blockchain.add(newBlock);
+    public static boolean addBlock(Block newBlock) {
+        //newBlock.mineBlock(difficulty);
+        if(blockchain.get(-1).hash == newBlock.hash) {
+        	return false;
+        }else {
+        	blockchain.add(newBlock);
+        	return true;
+        }
     }
 
     public static String getPreviousHash(){

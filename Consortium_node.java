@@ -5,6 +5,8 @@ import java.net.Socket;
 
 public class Consortium_node{
 	static node_info node_storage;
+	//컨소시엄이름 입력 ->이걸로 멤버노드Id 정해짐 ex)soyang1 soyang2 soyang3...
+	static String consortiumName = "";
 
 	
 	public static void main(String[] args) throws Exception{
@@ -19,7 +21,7 @@ public class Consortium_node{
 		int myPortNum = Integer.parseInt(bufferedReader.readLine());
 
 		//broker node용 port 번호는 my_port + 1
-		broker_node bk_node = new broker_node(node_storage, myPortNum + 1, chain);
+		broker_node bk_node = new broker_node(node_storage, myPortNum + 1, chain, consortiumName);
 		ServerThread serverThread = new ServerThread(myPortNum);
 		
 		serverThread.start();
@@ -76,5 +78,9 @@ public class Consortium_node{
 		}catch(Exception e) {
 			
 		}
+	}
+	
+	public String getConsortiumName() {
+		return consortiumName;
 	}
 }
