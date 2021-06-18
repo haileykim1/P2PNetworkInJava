@@ -49,7 +49,7 @@ public class Consortium_node{
 			Socket socket = null;
 			try {
 				socket = new Socket(peers[i], 30001);
-				new PeerThread(socket, peers[i],myPortNum, chain).start();
+				new PeerThread(socket, peers[i],myPortNum, chain, node_storage).start();
 				
 			} catch(Exception e) {
 				if(socket != null)
