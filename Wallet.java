@@ -24,6 +24,10 @@ public class Wallet implements Serializable{
 		this.id = my_id;
 		generateKeyPair();
 	}
+	
+	public void set_id(String id) {
+		this.id = id;
+	}
 
 	public void generateKeyPair() {
 		try {

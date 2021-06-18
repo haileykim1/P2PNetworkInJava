@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.security.PublicKey;
 import java.util.Iterator;
 
 public class TransactionThread extends Thread implements Serializable{
@@ -23,6 +24,7 @@ public class TransactionThread extends Thread implements Serializable{
 		try {
 			while(true) {
 
+				
 				System.out.println(">>Enter ID of MemberNode you want to send to.");
 				rcvID = bufferedReader.readLine();
 				System.out.println(">>Enter How much Coins you want to send");
@@ -48,6 +50,13 @@ public class TransactionThread extends Thread implements Serializable{
 			
 			out.writeObject(transactionInfo);
 			
+			/*Transaction tr = new Transaction(memberInfo.getId(), 
+					transactionInfo.getRcvId(),
+					memberInfo.getWallet().publicKey,
+					transactionInfo.getFundValue());
+					(PublicKey)in.readObject(),*/
+					
+					
 			consortiumSocket.close();
 			return (boolean)in.readObject();
 			
