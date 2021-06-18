@@ -71,11 +71,14 @@ public class broker_node extends Thread implements Serializable{
 
 					serverThread.sendMessage(info);
 
-
+					//inner transaction
 					MemberInfo receiver;
 					if((node_storage.select(info.getRcvId())) != null) {
 						receiver = node_storage.node_list.get(info.getRcvId());
-						oout.writeObject(receiver.getWallet().publicKey);
+						Transaction tr = receiver.getWallet().sendFunds(receiver.getWallet().publicKey, info.getFundValue());
+						chain.queue.get(chain.queuePos).addTransaction(tr);
+						System.out.println("Transaction succeed");
+						oout.writeObject(true);
 					}
 
 				}
@@ -105,8 +108,11 @@ public class broker_node extends Thread implements Serializable{
 						oout.writeObject((String)(consortiumName + (++cnt)));
 					}else if(data.equals("BLOCK")) {
 						//占쏙옙占쏙옙占� 占싹쇽옙占실몌옙 占쏙옙占쏙옙 占쌍깍옙
-
-						if(chain.queue.get(chain.queuePos).add_transaction_num == 4) {
+						if(chain.blockchain.size() == 1) {
+							Block block = new Block(chain.getPreviousHash());
+							oout.writeObject(block);
+						}
+						else if(chain.queue.get(chain.queuePos).add_transaction_num == 4) {
 							Block block = new Block(chain.getPreviousHash());
 							block.transactions = chain.queue.get(chain.queuePos).transactions;
 							block.hash = block.calculateHash();
@@ -141,7 +147,7 @@ public class broker_node extends Thread implements Serializable{
 
 
 		} catch(Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

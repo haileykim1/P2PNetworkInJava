@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 public class TransactionThread extends Thread implements Serializable{
 	String rcvID;
-	int sendValue;
+	float sendValue;
 	static MemberInfo memberInfo;
 	
 	
@@ -28,7 +28,7 @@ public class TransactionThread extends Thread implements Serializable{
 				System.out.println(">>Enter ID of MemberNode you want to send to.");
 				rcvID = bufferedReader.readLine();
 				System.out.println(">>Enter How much Coins you want to send");
-				sendValue = Integer.parseInt(bufferedReader.readLine());
+				sendValue = Float.parseFloat(bufferedReader.readLine());
 				TransactionInfo transactionInfo = new TransactionInfo(rcvID, sendValue);
 				boolean flag = send_Transaction(transactionInfo);
 				if(flag)

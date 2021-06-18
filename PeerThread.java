@@ -15,6 +15,8 @@ public class PeerThread extends Thread{
 	private node_info node_storage;
 	private int my_port;
 	private BlockChain chain;
+	
+	
 	public PeerThread(Socket socket,String ipStr, int portnum, BlockChain chain, node_info node_storage) throws IOException{
 		//bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		oin = new ObjectInputStream(socket.getInputStream());

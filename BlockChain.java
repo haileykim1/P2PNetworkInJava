@@ -63,6 +63,7 @@ public class BlockChain {
             genesisBlock.mineBlock(difficulty);
             //addBlock(genesisBlock);
             blockchain.add(genesisBlock);
+            queue.add(new Block());
 
         }catch(Exception e){
             throw new RuntimeException(e);
@@ -160,8 +161,10 @@ public class BlockChain {
     }
 
     public static String getPreviousHash(){
+    	System.out.println(blockchain.size());
         return blockchain.get(blockchain.size() - 1).hash;
     }
+    
     public static void setDifficulty(int difficulty){
         difficulty = difficulty;
     }

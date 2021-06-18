@@ -1,10 +1,11 @@
+import java.io.Serializable;
 
-public class TransactionInfo {
+public class TransactionInfo implements Serializable{
 	private String rcvID;
-	private int fundValue;
+	private float fundValue;
 	//필요하면 추가
 	
-	TransactionInfo(String id, int value){
+	TransactionInfo(String id, float value){
 		this.rcvID = id;
 		this.fundValue = value;
 	}
@@ -13,7 +14,7 @@ public class TransactionInfo {
 		return rcvID;
 	}
 	
-	public int getFundValue() {
+	public float getFundValue() {
 		return fundValue;
 	}
 }

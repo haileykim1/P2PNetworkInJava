@@ -26,7 +26,7 @@ public class Consortium_node{
 		myPortNum = Integer.parseInt(bufferedReader.readLine());
 
 		//broker node??? port ??????? my_port + 1
-		bk_node = new broker_node(node_storage, myPortNum + 1, chain, consortiumName);
+		bk_node = new broker_node(node_storage, myPortNum + 1, chain, "soyang");
 		serverThread = new ServerThread(myPortNum);
 		bk_node.serverThread = serverThread;
 
@@ -44,16 +44,22 @@ public class Consortium_node{
 		peers[0] = "175.208.245.129";
 		peers[1] = "221.167.222.167";
 		//peers[2] = "59.13.228.230";
+		peerPorts[0] = 30001;
+		peerPorts[1] = 30001;
+		//peerPorts[2] = 30006;
+		
 
 		for(int i = 0; i < peers.length; ++i) {
 			Socket socket = null;
 			try {
-				socket = new Socket(peers[i], 30001);
+				socket = new Socket(peers[i], peerPorts[i]);
 				new PeerThread(socket, peers[i],myPortNum, chain, node_storage).start();
 				
 			} catch(Exception e) {
-				if(socket != null)
+				if(socket != null) {
+					System.out.println("socketnull");
 					socket.close();
+				}
 				else
 					System.out.println("Invalid Input");
 				//e.printStackTrace();
@@ -105,7 +111,7 @@ public class Consortium_node{
 				serverThread.sendMessage(transaction);
 				//? ??? transaction ??
 				if(block.add_transaction_num == 4) {
-					chain.queue.add(new Block(chain.getPreviousHash()));
+					chain.queue.add(new Block());
 					chain.queue.get(chain.queue.size() - 1).addTransaction(transaction);
 				}else {
 					block.addTransaction(transaction);
