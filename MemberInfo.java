@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class MemberInfo {
+public class MemberInfo implements Serializable{
 	private Wallet wallet;
 	private String id;
 	private String ip;

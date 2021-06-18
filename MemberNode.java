@@ -3,11 +3,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class MemberNode {
+public class MemberNode implements Serializable{
 	//private Block block;
 	private static Wallet wallet;
 	//여기다 정보 기록하고 brokernode통해 enroll시 이거 넘겨줌.
@@ -24,11 +25,9 @@ public class MemberNode {
 		System.out.println("Starting MEMBER NODE...");
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-			//ID등록
-			ID = getID();
+			
 			wallet = new Wallet(ID);
 			memberInfo = new MemberInfo(wallet);
-			memberInfo.setId(ID);
 			
 			//자신의 IP 등록
 			String local = new String(InetAddress.getLocalHost().getAddress());
@@ -42,6 +41,10 @@ public class MemberNode {
 			//Membernode가 컨소시엄과 통신하는 포트는 broker_node포트임.
 			System.out.println(">> Enter Consortium Broker Port");
 			memberInfo.setConsortiumPort(Integer.parseInt(bufferedReader.readLine()));
+			
+			//ID등록
+			ID = getID();
+			memberInfo.setId(ID);
 			
 			//Consortium(broker node)에 자신 등록
 			boolean flag = EnrolMemberNode();
