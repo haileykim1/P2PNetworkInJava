@@ -12,7 +12,15 @@ public class Wallet {
 
 	public HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
 
+	public String id;
 	public Wallet() {
+		generateKeyPair();
+	}
+	
+	//요버전으로 만들어주세요.
+	
+	public Wallet(String my_id) {
+		this.id = my_id;
 		generateKeyPair();
 	}
 
