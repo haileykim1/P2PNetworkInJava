@@ -17,7 +17,7 @@ public class Wallet {
 		generateKeyPair();
 	}
 	
-	//¿ä¹öÀüÀ¸·Î ¸¸µé¾îÁÖ¼¼¿ä.
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.
 	
 	public Wallet(String my_id) {
 		this.id = my_id;
