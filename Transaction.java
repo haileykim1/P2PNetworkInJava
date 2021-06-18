@@ -13,9 +13,19 @@ public class Transaction {
 	public ArrayList<TransactionOutput> outputs = new ArrayList<TransactionOutput>();
 
 	private static int sequence = 0; //A rough count of how many transactions have been generated
-
+	public String sender_id;
+	public String recipient_id;
 	// Constructor:
 	public Transaction(PublicKey from, PublicKey to, float value,  ArrayList<TransactionInput> inputs) {
+		this.sender = from;
+		this.recipient = to;
+		this.value = value;
+		this.inputs = inputs;
+	}
+	
+	public Transaction(String sender_id, String receiver_id,PublicKey from, PublicKey to, float value, ArrayList<TransactionInput> inputs) {
+		this.sender_id = sender_id;
+		this.recipient_id = receiver_id;
 		this.sender = from;
 		this.recipient = to;
 		this.value = value;
@@ -78,6 +88,7 @@ public class Transaction {
 	}
 
 	public boolean verifySignature() {
+		//signature가 암호화된 정보, data가 우리가 보낸 정보, sender가 보낸 사람
 		String data = StringUtil.getStringFromKey(sender) + StringUtil.getStringFromKey(recipient) + Float.toString(value)	;
 		return StringUtil.verifyECDSASig(sender, data, signature);
 	}

@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -14,7 +15,7 @@ public class MemberNode {
 	private static MemberInfo memberInfo;
 	private static ServerSocket serverSocket = null;
 	private static Socket consortiumSocket = null;
-	
+	private static String ID = null;
 	
 	
 	
@@ -23,8 +24,16 @@ public class MemberNode {
 		System.out.println("Starting MEMBER NODE...");
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-			wallet = new Wallet();
+			//ID등록
+			System.out.println(">> Enter your ID");
+			ID = bufferedReader.readLine();
+			wallet = new Wallet(ID);
 			memberInfo = new MemberInfo(wallet);
+			memberInfo.setId(ID);
+			
+			//자신의 IP 등록
+			String local = new String(InetAddress.getLocalHost().getAddress());
+			memberInfo.setIP(local);
 			
 			//Member정보 MemberInfo에 등록
 			System.out.println(">> Enter your PORT Number");
