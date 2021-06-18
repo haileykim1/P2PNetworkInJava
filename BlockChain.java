@@ -43,8 +43,10 @@ public class BlockChain {
             genesisTransaction = new Transaction(publicKey, publicKey2, 100f, null);
             genesisTransaction.generateSignature(privateKey);
             genesisTransaction.transactionId = "0";
-            genesisTransaction.outputs.add(new TransactionOutput(genesisTransaction.recipient, genesisTransaction.value, genesisTransaction.transactionId));
-            UTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0));
+            for(int i=0; i<10; i++){
+                genesisTransaction.outputs.add(new TransactionOutput(genesisTransaction.recipient, genesisTransaction.value, genesisTransaction.transactionId));
+                UTXOs.put(genesisTransaction.outputs.get(i).id, genesisTransaction.outputs.get(i));
+            }
             
             /*String timeStr = Long.toString(new Date().getTime());
             if(timeStr.length() > 9) {
