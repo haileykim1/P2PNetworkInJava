@@ -7,11 +7,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Iterator;
 
-import org.jsoup.*;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 
 public class broker_node extends Thread implements Serializable{
 	
@@ -64,6 +59,8 @@ public class broker_node extends Thread implements Serializable{
 					
 					oout.writeObject(chain.addBlock((Block)data));
 				}
+				
+				
 				else if(data instanceof TransactionInfo) {
 					System.out.println("Object : TransactionInfo");
 					
@@ -132,7 +129,7 @@ public class broker_node extends Thread implements Serializable{
 						if(block.nonce == 4) {
 							oout.writeObject(block);
 =======
-						//ºí·ÏÀÌ ¿Ï¼ºµÇ¸é Á¶°Ç ³Ö±â
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¼ï¿½ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½
 						
 						if(chain.queue.get(chain.queuePos).add_transaction_num == 4) {
 							oout.writeObject(chain.queue.get(chain.queuePos));
