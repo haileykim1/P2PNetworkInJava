@@ -5,8 +5,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class broker_node extends Consortium_node{
+
+public class broker_node extends Thread{
+	
+	static node_info node_storage;
+	
 	public void run() {
+		System.out.println("Broker Node start...");
 		NetworkEndPoint i = null;
 		try {
 			i = new NetworkEndPoint();
@@ -17,7 +22,6 @@ public class broker_node extends Consortium_node{
 		try {
 			
 			while(true) {
-				//Thread.sleep(10);
 				
 				//Message format
 				//enrol : type#Membernode_id#Membernode_ip
@@ -34,7 +38,7 @@ public class broker_node extends Consortium_node{
 					//CONSORTIUM 등록
 					String node_id = msg[1];
 					String node_ip = msg[2];
-					super.node_storage.enrol(node_id, node_ip);
+					node_storage.enrolConsortium(node_id, node_ip);
 					break;
 					
 				case "TRANSACTION":
@@ -44,7 +48,7 @@ public class broker_node extends Consortium_node{
 					String sender_node = msg[1];
 					node_id = msg[2];
 					String price = msg[3];
-					String receive_node = super.node_storage.select(node_id);
+					String receive_node = node_storage.select(node_id);
 					if(receive_node == null) {
 						String[] consortium_ip = {i.HeeEul, i.YeIn, i.SoYang};
 						String MyWanIP = find_MyWanIP();
@@ -69,7 +73,7 @@ public class broker_node extends Consortium_node{
 					break;
 				case "DELETE":
 					node_id = msg[1];
-					super.node_storage.delete(node_id);
+					node_storage.delete(node_id);
 					
 				default :
 					System.out.println("brokernode : Error : String Error");
@@ -81,9 +85,9 @@ public class broker_node extends Consortium_node{
 	}
 	
 	//broker_node를 생성했을 때부터 local message 대기
-	broker_node() {
-		broker_node th = new broker_node();
-		th.start();
+	broker_node(node_info node_storage) {
+		this.node_storage = node_storage;
+		this.start();
 	}
 	
 	public String find_MyWanIP() {

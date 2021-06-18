@@ -12,8 +12,8 @@ public class Consortium_node{
 		System.out.println("Consortium Node Start...");
 
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));		
-		//broker_node bk_node = new broker_node();		
 		node_storage = new node_info();		
+		broker_node bk_node = new broker_node(node_storage);		
 		//BlockChain chain = new BlockChain();
 		
 		System.out.println(">> Enter your Port Number");
