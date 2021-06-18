@@ -5,6 +5,8 @@ import java.net.Socket;
 
 public class Consortium_node{
 	static node_info node_storage;
+	//컨소시엄이름 입력 ->이걸로 멤버노드Id 정해짐 ex)soyang1 soyang2 soyang3...
+	static String consortiumName = "";
 
 	
 	public static void main(String[] args) throws Exception{

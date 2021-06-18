@@ -57,7 +57,8 @@ public class broker_node extends Thread{
 				else if(data instanceof Block) {
 					System.out.println("Object : Block");
 					//Blockchain¿¡ µî·Ï
-					chain.addBlock((Block)data);
+					
+					oout.writeObject(chain.addBlock((Block)data));
 				}
 				else if(data instanceof ConsortiumInfo) {
 					System.out.println("Object : Consortium");
@@ -99,8 +100,15 @@ public class broker_node extends Thread{
 					}
 				}
 				else if(data instanceof String) {
-					System.out.println("Object : String -> DELETE");
-					node_storage.delete((String)data);
+					String str = (String)data;
+					if(data.equals("HASH")) {
+						System.out.println("Membernode needs prevHash value");
+						oout.writeObject(chain.getPreviousHash());
+					}else {
+
+						System.out.println("Object : String -> DELETE");
+						node_storage.delete((String)data);
+					}
 				}
 				
 				else {
