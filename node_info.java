@@ -1,52 +1,52 @@
 import java.util.HashMap;
 
 public class node_info {
-	//id¸¦ ³ÖÀ¸¸é ip¸¦ ¹İÈ¯
+	//idë¥¼ ë„£ìœ¼ë©´ ipë¥¼ ë°˜í™˜
 	//Member
 	static HashMap<MemberInfo,String> memberToId = new HashMap();
 	static HashMap<String, MemberInfo> idToMember = new HashMap();
 
 	static HashMap<String,MemberInfo> node_list = new HashMap();
-	
 
-			
+
+
 	node_info() {
-		
+
 		System.out.println("node_info Start..");
 		//MemeberNode [] node_list = new MemberNode[MAX];
 	}
-	
+
 	/*public static void enrolConsortium(String id, String ip) {
 		if(node_list.get(id) == null) {
 			node_list.put(id, ip);
 			System.out.println("node_info : enrol succuess");
-			
+
 		}
 		else {
 			System.out.println("node_info : enrol fail : id reduplication");
 		}
 	}*/
-	
+
 	public static boolean enrol(MemberInfo memberInfo) {
 
-		//Membernode¿¡ °üÇÑ Á¤º¸ ÇÊ¿ä. -> ÀÌ¸§, ÀÜ¾× µî mem
-		
+		//Membernodeì— ê´€í•œ ì •ë³´ í•„ìš”. -> ì´ë¦„, ì”ì•¡ ë“± mem
+
 		if(node_list.get(memberInfo.getId()) == null) {
 			node_list.put(memberInfo.getId(), memberInfo);
 			System.out.println("node_info : enrol succuess");
 			return true;
-			
+
 		}
 		else {
 			System.out.println("node_info : enrol fail : id reduplication");
 		}
 		return false;
-		
+
 	}
-	
-	
+
+
 	public static String select(String id) {
-		
+
 		MemberInfo mem = node_list.get(id);
 		if(mem == null) {
 
@@ -56,7 +56,7 @@ public class node_info {
 		System.out.println("node_info : select succuess : ");
 		return mem.getIP();
 	}
-	
+
 	public static int delete(String id) {
 
 		MemberInfo ip = node_list.get(id);

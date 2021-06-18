@@ -21,7 +21,6 @@ public class TransactionThread extends Thread implements Serializable{
 	
 	public void run() {
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-		
 		try {
 			while(true) {
 
@@ -41,10 +40,8 @@ public class TransactionThread extends Thread implements Serializable{
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
+
 	private static boolean send_Transaction(TransactionInfo transactionInfo) {
 		try {
 			Socket consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
