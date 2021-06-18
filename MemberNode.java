@@ -29,7 +29,7 @@ public class MemberNode implements Serializable{
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 			
-			wallet = new Wallet(ID);
+
 			memberInfo = new MemberInfo(wallet);
 			
 			//자신의 IP 등록
@@ -45,9 +45,11 @@ public class MemberNode implements Serializable{
 			System.out.println(">> Enter Consortium Broker Port");
 			memberInfo.setConsortiumPort(Integer.parseInt(bufferedReader.readLine()));
 			
+			//변수 둬서 나중에 생성
 			//ID등록
 			ID = getID();
 			memberInfo.setId(ID);
+			wallet = new Wallet(ID);
 			
 			//Consortium(broker node)에 자신 등록
 			boolean flag = EnrolMemberNode();
@@ -64,14 +66,32 @@ public class MemberNode implements Serializable{
 				
 				//이전 해시 값
 				String prevHash = getPrevHash();
+<<<<<<< HEAD
 				int difficulty = 3;
+				
+				//Consortium으로부터 완성된 블록값 받아옴.
+				consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
+				ObjectOutputStream out = new ObjectOutputStream(consortiumSocket.getOutputStream());
+				ObjectInputStream in = new ObjectInputStream(consortiumSocket.getInputStream());
+				
+				out.writeObject("BLOCK");
+				if(in.readObject() instanceof Boolean) {
+					continue;
+				}
+					
+				Block block = (Block)in.readObject();
+				
+=======
+				int difficulty = 4;
 				Block block = new Block(prevHash);
+>>>>>>> 85cbf2f0ecee374102b6ec59044b301e4276b8bb
 				block.mineBlock(difficulty);
 				
 				
 				//채굴 완료 후 Consortium node(broker node)에 등록
 				//블록 채굴 시 오래걸릴 수 있으므로 등록 시만 소켓 열었다 닫기
 				boolean isBlockEnrolled = new MemberNode().EnrolBlock(block);
+				
 				if(isBlockEnrolled) {
 					System.out.println("Block Successfully Enrolled!");
 				}else {

@@ -115,6 +115,14 @@ public class broker_node extends Thread implements Serializable{
 					}else if(data.equals("ID")) {
 						System.out.println("Membernode needs ID value");
 						oout.writeObject((String)(consortiumName + (++cnt)));
+					}else if(data.equals("BLOCK")) {
+						//블록이 완성되면 조건 넣기
+						Block block = new Block(chain.getPreviousHash());
+						if(block.nonce == 4) {
+							oout.writeObject(block);
+						} else {
+							oout.writeObject(false);
+						}
 					}
 					else {
 
