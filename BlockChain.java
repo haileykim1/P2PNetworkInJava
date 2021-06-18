@@ -141,7 +141,7 @@ public class BlockChain {
 
     public static boolean addBlock(Block newBlock) {
         //newBlock.mineBlock(difficulty);
-        if(blockchain.get(-1).nonce == newBlock.nonce) {
+        if(blockchain.get(-1).hash == newBlock.hash) {
         	return false;
         }else {
         	blockchain.add(newBlock);
