@@ -7,12 +7,9 @@ public class Consortium_node{
 	static node_info node_storage;
 	//컨소시엄이름 입력 ->이걸로 멤버노드Id 정해짐 ex)soyang1 soyang2 soyang3...
 	static String consortiumName = "";
-<<<<<<< HEAD
 	static int myPortNum;
-=======
 	static BlockChain chain;
 	static broker_node bk_node;
->>>>>>> 76de4a517f0bb74c761559754f8bd1f81001d404
 
 	
 	public static void main(String[] args) throws Exception{
