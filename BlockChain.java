@@ -56,7 +56,8 @@ public class BlockChain {
             Block genesisBlock = new Block("0", 1623486340);
             genesisBlock.addTransaction(genesisTransaction);
             genesisBlock.mineBlock(difficulty);
-            addBlock(genesisBlock);
+            //addBlock(genesisBlock);
+            blockchain.add(genesisBlock);
 
         }catch(Exception e){
             throw new RuntimeException(e);
@@ -145,7 +146,7 @@ public class BlockChain {
 
     public static boolean addBlock(Block newBlock) {
         //newBlock.mineBlock(difficulty);
-        if(blockchain.get(-1).hash == newBlock.hash) {
+        if(blockchain.get(blockchain.size() - 1).hash == newBlock.hash) {
         	return false;
         }else {
         	blockchain.add(newBlock);
@@ -154,7 +155,7 @@ public class BlockChain {
     }
 
     public static String getPreviousHash(){
-        return blockchain.get(-1).hash;
+        return blockchain.get(blockchain.size() - 1).hash;
     }
     public static void setDifficulty(int difficulty){
         difficulty = difficulty;

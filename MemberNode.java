@@ -3,11 +3,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.Security;
 
-public class MemberNode {
+public class MemberNode implements Serializable{
 	//private Block block;
 	private static Wallet wallet;
 	//여기다 정보 기록하고 brokernode통해 enroll시 이거 넘겨줌.
@@ -16,19 +18,19 @@ public class MemberNode {
 	private static ServerSocket serverSocket = null;
 	private static Socket consortiumSocket = null;
 	private static String ID = null;
-	
+	private static TransactionThread transactionThread;
 	
 	
 	public static void main(String[] args) {
 
+    	Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+
 		System.out.println("Starting MEMBER NODE...");
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-			//ID등록
-			ID = getID();
+			
 			wallet = new Wallet(ID);
 			memberInfo = new MemberInfo(wallet);
-			memberInfo.setId(ID);
 			
 			//자신의 IP 등록
 			String local = new String(InetAddress.getLocalHost().getAddress());
@@ -43,6 +45,10 @@ public class MemberNode {
 			System.out.println(">> Enter Consortium Broker Port");
 			memberInfo.setConsortiumPort(Integer.parseInt(bufferedReader.readLine()));
 			
+			//ID등록
+			ID = getID();
+			memberInfo.setId(ID);
+			
 			//Consortium(broker node)에 자신 등록
 			boolean flag = EnrolMemberNode();
 			
@@ -50,6 +56,8 @@ public class MemberNode {
 				System.out.println("MemberNode Enrollment Failed!");
 			}
 			
+			transactionThread = new TransactionThread(memberInfo);
+			transactionThread.start();
 			while(flag) {
 
 				//Block 채굴
@@ -78,6 +86,40 @@ public class MemberNode {
 		}
 		
 	}
+	
+	
+	
+
+
+	//Transaction 보내는 함수 - 활용안했습니다! 활용할 부분에 사용하면 될듯!
+	private static boolean send_Transaction(float value) {
+		try {
+			consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
+			ObjectOutputStream out = new ObjectOutputStream(consortiumSocket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(consortiumSocket.getInputStream());
+			
+			Transaction tr = wallet.sendFunds(wallet.publicKey, value);
+			
+			out.writeObject(tr);
+			
+			return (boolean)in.readObject();
+			
+		}catch(Exception e) {
+			System.out.println(e);
+		}finally {
+			try {
+				
+				consortiumSocket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return false;
+	}
+
 	private static String getID() {
 		String ret = "";
 		try {
@@ -185,3 +227,4 @@ public class MemberNode {
 	
 	
 }
+

@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,7 +13,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
-public class broker_node extends Thread{
+public class broker_node extends Thread implements Serializable{
 	
 	static node_info node_storage;
 	static int my_port;
@@ -22,6 +23,7 @@ public class broker_node extends Thread{
 	ObjectInputStream oin;
 	ObjectOutputStream oout;
 	static String consortiumName = "";
+	static ServerThread serverThread;
 	int cnt = 0;
 	
 	public void run(){
@@ -62,8 +64,8 @@ public class broker_node extends Thread{
 					
 					oout.writeObject(chain.addBlock((Block)data));
 				}
-				else if(data instanceof ConsortiumInfo) {
-					System.out.println("Object : Consortium");
+				else if(data instanceof TransactionInfo) {
+					System.out.println("Object : TransactionInfo");
 					
 				}
 				
@@ -75,20 +77,24 @@ public class broker_node extends Thread{
 					//받은 Transaction 검증하는 부분
 					if(tr.processTransaction() == false) {
 						System.err.println("Broker Node : Error : transaction can not verify");
+						oout.writeObject(false);
 					}
 					else {
 						
 						//보내는 부분(나에게 해당 member가 있던 없던 다 보내어 block에 기록하여야하므로 보냄
 						//Consortium 노드에 구현
 							String[] consortium_ip = {i.HeeEul, i.YeIn, i.SoYang};
-							String MyWanIP = find_MyWanIP();
-							for(int k = 0; k < 3; k++) {
+							//String MyWanIP = find_MyWanIP();
+							String MyWanIP = "59.13.228.230";
+							/*for(int k = 0; k < 3; k++) {
 								if(MyWanIP == consortium_ip[k]) {
 									continue;
 								}
 								i.set_IP(consortium_ip[k]);
 								i.object_send(tr, my_port-1);
-							}
+							}*/
+							
+							serverThread.sendMessage(tr);
 						//receipent 측에서 자신에게 보내진 transaction인지 아닌지 확인한 후, 맞다면 지갑에 반영한 후 block에 기록, 아니라면 그냥 블록에 기록
 						//이건 membernode 쪽에 message 받기 해주어야 함.
 						Iterator<String> keys = node_storage.node_list.keySet().iterator();
@@ -98,7 +104,7 @@ public class broker_node extends Thread{
 							i.object_send(tr, my_port);		
 						}
 					
-						
+						oout.writeObject(true);
 					}
 				}
 				else if(data instanceof String) {

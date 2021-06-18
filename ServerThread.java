@@ -24,10 +24,10 @@ public class ServerThread extends Thread{
 			e.printStackTrace();
 		}
 	}
-	void sendMessage(String message) {
+	void sendMessage(Object o) {
 		try {
 			for(ServerThreadStream s: serverThreadStreams) {
-				s.getPrintWriter().println(message);
+				s.getPrintWriter().println(o);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

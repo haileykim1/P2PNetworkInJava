@@ -1,11 +1,12 @@
 
+import java.io.Serializable;
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Wallet {
+public class Wallet implements Serializable{
 
 	public PrivateKey privateKey;
 	public PublicKey publicKey;
@@ -42,7 +43,7 @@ public class Wallet {
 	}
 
 	public float getBalance() {
-		float total = 0;
+		float total = 10;
 		for (Map.Entry<String, TransactionOutput> item: BlockChain.UTXOs.entrySet()){
 			TransactionOutput UTXO = item.getValue();
 			if(UTXO.isMine(publicKey)) { //if output belongs to me ( if coins belong to me )
