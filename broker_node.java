@@ -50,7 +50,7 @@ public class broker_node extends Thread implements Serializable{
 				//DELETE : type#sender -> String
 				
 				
-				//objectÅ¸ÀÔ ¼ÒÄÏ Åë½Å
+				//objectíƒ€ì… ì†Œì¼“ í†µì‹ 
 				Object data = oin.readObject();
 				
 				if(data instanceof MemberInfo) {
@@ -60,13 +60,27 @@ public class broker_node extends Thread implements Serializable{
 				}
 				else if(data instanceof Block) {
 					System.out.println("Object : Block");
-					//Blockchain¿¡ µî·Ï
+					//Blockchainì— ë“±ë¡
 					
 					oout.writeObject(chain.addBlock((Block)data));
 				}
 				else if(data instanceof TransactionInfo) {
 					System.out.println("Object : TransactionInfo");
 					
+					//inner
+					//public keyë¥¼ ê°€ì ¸ì˜¤ë©´ Transactionì„ ìƒì„±í•˜ê³ 
+					TransactionInfo info = (TransactionInfo) data;
+					
+					//íŠ¸ëœì­ì…˜ info ë³´ë‚´ê¸°
+					serverThread.sendMessage(info);
+					
+					//node_infoì— ìˆëŠ” Membernodeì˜ ê°’ì´ nullì´ ì•„ë‹ˆë¼ë©´, ì¦‰, ë‚˜ì˜ ì»¨ì†Œì‹œì›€ì— ì†í•´ ìˆëŠ” MemberNodeì— Sendë¥¼ í•˜ëŠ” ê²½ìš°
+					MemberInfo receiver;
+					if((node_storage.select(info.getRcvId())) != null) {
+						receiver = node_storage.node_list.get(info.getRcvId());
+						oout.writeObject(receiver.getWallet().publicKey);
+					}
+						
 				}
 				
 				else if(data instanceof Transaction) {
@@ -74,18 +88,20 @@ public class broker_node extends Thread implements Serializable{
 					NetworkEndPoint i = new NetworkEndPoint();
 					Transaction tr = (Transaction) data;
 					String receive_node = node_storage.select(tr.recipient_id);
-					//¹ŞÀº Transaction °ËÁõÇÏ´Â ºÎºĞ
+					//ë°›ì€ Transaction ê²€ì¦í•˜ëŠ” ë¶€ë¶„
 					if(tr.processTransaction() == false) {
 						System.err.println("Broker Node : Error : transaction can not verify");
 						oout.writeObject(false);
 					}
 					else {
+
 						
-						//º¸³»´Â ºÎºĞ(³ª¿¡°Ô ÇØ´ç member°¡ ÀÖ´ø ¾ø´ø ´Ù º¸³»¾î block¿¡ ±â·ÏÇÏ¿©¾ßÇÏ¹Ç·Î º¸³¿
-						//Consortium ³ëµå¿¡ ±¸Çö
-							String[] consortium_ip = {i.HeeEul, i.YeIn, i.SoYang};
+						//ë³´ë‚´ëŠ” ë¶€ë¶„(ë‚˜ì—ê²Œ í•´ë‹¹ memberê°€ ìˆë˜ ì—†ë˜ ë‹¤ ë³´ë‚´ì–´ blockì— ê¸°ë¡í•˜ì—¬ì•¼í•˜ë¯€ë¡œ ë³´ëƒ„
+						//Consortium ë…¸ë“œì— êµ¬í˜„
+						//Outer
+							//String[] consortium_ip = {i.HeeEul, i.YeIn, i.SoYang};
 							//String MyWanIP = find_MyWanIP();
-							String MyWanIP = "59.13.228.230";
+							//String MyWanIP = "59.13.228.230";
 							/*for(int k = 0; k < 3; k++) {
 								if(MyWanIP == consortium_ip[k]) {
 									continue;
@@ -95,14 +111,8 @@ public class broker_node extends Thread implements Serializable{
 							}*/
 							
 							serverThread.sendMessage(tr);
-						//receipent Ãø¿¡¼­ ÀÚ½Å¿¡°Ô º¸³»Áø transactionÀÎÁö ¾Æ´ÑÁö È®ÀÎÇÑ ÈÄ, ¸Â´Ù¸é Áö°©¿¡ ¹İ¿µÇÑ ÈÄ block¿¡ ±â·Ï, ¾Æ´Ï¶ó¸é ±×³É ºí·Ï¿¡ ±â·Ï
-						//ÀÌ°Ç membernode ÂÊ¿¡ message ¹Ş±â ÇØÁÖ¾î¾ß ÇÔ.
-						Iterator<String> keys = node_storage.node_list.keySet().iterator();
-						while(keys.hasNext()) {
-							String key = keys.next();
-							i.set_IP(node_storage.select(key));
-							i.object_send(tr, my_port);		
-						}
+						//receipent ì¸¡ì—ì„œ ìì‹ ì—ê²Œ ë³´ë‚´ì§„ transactionì¸ì§€ ì•„ë‹Œì§€ í™•ì¸í•œ í›„, ë§ë‹¤ë©´ ì§€ê°‘ì— ë°˜ì˜í•œ í›„ blockì— ê¸°ë¡, ì•„ë‹ˆë¼ë©´ ê·¸ëƒ¥ ë¸”ë¡ì— ê¸°ë¡
+						//ì´ê±´ membernode ìª½ì— message ë°›ê¸° í•´ì£¼ì–´ì•¼ í•¨.
 					
 						oout.writeObject(true);
 					}
@@ -116,7 +126,7 @@ public class broker_node extends Thread implements Serializable{
 						System.out.println("Membernode needs ID value");
 						oout.writeObject((String)(consortiumName + (++cnt)));
 					}else if(data.equals("BLOCK")) {
-						//ºí·ÏÀÌ ¿Ï¼ºµÇ¸é Á¶°Ç ³Ö±â
+						//ë¸”ë¡ì´ ì™„ì„±ë˜ë©´ ì¡°ê±´ ë„£ê¸°
 						Block block = new Block(chain.getPreviousHash());
 						if(block.nonce == 4) {
 							oout.writeObject(block);
@@ -151,7 +161,7 @@ public class broker_node extends Thread implements Serializable{
 		}
 	}
 	
-	//broker_node¸¦ »ı¼ºÇßÀ» ¶§ºÎÅÍ local message ´ë±â
+	//broker_nodeë¥¼ ìƒì„±í–ˆì„ ë•Œë¶€í„° local message ëŒ€ê¸°
 	broker_node(node_info node_storage, int my_port, BlockChain chain, String name) {
 		this.node_storage = node_storage;
 		this.my_port = my_port;
@@ -164,29 +174,7 @@ public class broker_node extends Thread implements Serializable{
 	protected void finalize() throws Throwable{
 	}
 	
-	public String find_MyWanIP() {
-		String MyWanIP = null;
-		try {
-			
-            String url = "https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query=%EB%82%B4+%EA%B3%B5%EC%9D%B8+ip&oquery=%EB%82%B4+ip&tqi=h7VLTlp0J14ssdCf%2BZ4ssssss4l-262799";
-            		
-            Connection conn = Jsoup.connect(url);
-            Document html = conn.get();
-            Elements fileblocks = html.getElementsByClass("ip_chk_box"); //ip_chk_wrap
-            for(Element fileblock : fileblocks) {
-            	String text = fileblock.text();
-            	MyWanIP = text;
-            }
-            
-            
-            System.out.println("MyWanIP : " + MyWanIP);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		
-		return MyWanIP;
-	}
-	
+
 	
 	
 	

@@ -5,7 +5,7 @@ import java.net.Socket;
 
 public class Consortium_node{
 	static node_info node_storage;
-	//ÄÁ¼Ò½Ã¾öÀÌ¸§ ÀÔ·Â ->ÀÌ°É·Î ¸â¹ö³ëµåId Á¤ÇØÁü ex)soyang1 soyang2 soyang3...
+	//ï¿½ï¿½ï¿½Ò½Ã¾ï¿½ï¿½Ì¸ï¿½ ï¿½Ô·ï¿½ ->ï¿½Ì°É·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Id ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ex)soyang1 soyang2 soyang3...
 	static String consortiumName = "";
 	static int myPortNum;
 	static BlockChain chain;
@@ -23,7 +23,7 @@ public class Consortium_node{
 		System.out.println(">> Enter your Port Number");
 		myPortNum = Integer.parseInt(bufferedReader.readLine());
 
-		//broker node¿ë port ¹øÈ£´Â my_port + 1
+		//broker nodeï¿½ï¿½ port ï¿½ï¿½È£ï¿½ï¿½ my_port + 1
 		bk_node = new broker_node(node_storage, myPortNum + 1, chain, consortiumName);
 		ServerThread serverThread = new ServerThread(myPortNum);
 		bk_node.serverThread = serverThread;
@@ -35,7 +35,7 @@ public class Consortium_node{
 	
 	public void pullFromPeers(BufferedReader bufferedReader, ServerThread serverThread) throws Exception{
 		System.out.println("pull From Peers");
-		//peer ipÁÖ¼Ò ¹è¿­
+		//peer ipï¿½Ö¼ï¿½ ï¿½è¿­
 		String[] peers = new String[2];
 		int[] peerPorts = new int[2];
 		
@@ -47,7 +47,7 @@ public class Consortium_node{
 			Socket socket = null;
 			try {
 				socket = new Socket(peers[i], 30001);
-				new PeerThread(socket, peers[i],node_storage, myPortNum + 1).start();
+				new PeerThread(socket, peers[i],node_storage, myPortNum).start();
 				
 			} catch(Exception e) {
 				if(socket != null)

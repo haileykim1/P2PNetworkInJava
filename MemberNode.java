@@ -30,6 +30,7 @@ public class MemberNode implements Serializable{
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 			
 
+			wallet = new Wallet();
 			memberInfo = new MemberInfo(wallet);
 			
 			//자신의 IP 등록
@@ -48,8 +49,8 @@ public class MemberNode implements Serializable{
 			//변수 둬서 나중에 생성
 			//ID등록
 			ID = getID();
+			wallet.set_id(ID);
 			memberInfo.setId(ID);
-			wallet = new Wallet(ID);
 			
 			//Consortium(broker node)에 자신 등록
 			boolean flag = EnrolMemberNode();
@@ -66,8 +67,7 @@ public class MemberNode implements Serializable{
 				
 				//이전 해시 값
 				String prevHash = getPrevHash();
-<<<<<<< HEAD
-				int difficulty = 3;
+				int difficulty = 4;
 				
 				//Consortium으로부터 완성된 블록값 받아옴.
 				consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
@@ -80,11 +80,6 @@ public class MemberNode implements Serializable{
 				}
 					
 				Block block = (Block)in.readObject();
-				
-=======
-				int difficulty = 4;
-				Block block = new Block(prevHash);
->>>>>>> 85cbf2f0ecee374102b6ec59044b301e4276b8bb
 				block.mineBlock(difficulty);
 				
 				
