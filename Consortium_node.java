@@ -12,13 +12,14 @@ public class Consortium_node{
 		System.out.println("Consortium Node Start...");
 
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));		
-		node_storage = new node_info();		
-		broker_node bk_node = new broker_node(node_storage);		
-		//BlockChain chain = new BlockChain();
+		node_storage = new node_info();				
+		BlockChain chain = new BlockChain();
 		
 		System.out.println(">> Enter your Port Number");
 		int myPortNum = Integer.parseInt(bufferedReader.readLine());
-		
+
+		//broker node용 port 번호는 my_port + 1
+		broker_node bk_node = new broker_node(node_storage, myPortNum + 1, chain);
 		ServerThread serverThread = new ServerThread(myPortNum);
 		
 		serverThread.start();
@@ -29,17 +30,17 @@ public class Consortium_node{
 	public void pullFromPeers(BufferedReader bufferedReader, ServerThread serverThread) throws Exception{
 		System.out.println("pull From Peers");
 		//peer ip주소 배열
-		String[] peers = new String[3];
-		int[] peerPorts = new int[3];
+		String[] peers = new String[2];
+		int[] peerPorts = new int[2];
 		
 		peers[0] = "175.208.245.129";
 		peers[1] = "221.167.222.167";
-		peers[0] = "59.13.228.230";
+		//peers[2] = "59.13.228.230";
 		
 		for(int i = 0; i < peers.length; ++i) {
 			Socket socket = null;
 			try {
-				socket = new Socket(peers[i], 30006);
+				socket = new Socket(peers[i], 30001);
 				new PeerThread(socket, peers[i]).start();
 			} catch(Exception e) {
 				if(socket != null)

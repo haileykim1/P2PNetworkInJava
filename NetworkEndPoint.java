@@ -30,19 +30,20 @@ public class NetworkEndPoint {
 		IP = ip;
 	}
 	
-	private void msg_receive() {
+	public String msg_receive(int r_port) {
 		
 		try {
 			
 			while(true) {
 
 				System.out.println("--Receive");
-				String s = wan_receive(rcv_port);
-				System.out.println(s);
+				String s = wan_receive(r_port);
+				return s;
 			}
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
+		return "";
 	}
 	
 	public void set_IP(String s) {

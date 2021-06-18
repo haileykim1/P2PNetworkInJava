@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
+import java.util.Date;
 
 public class BlockChain {
     public static ArrayList<Block> blockchain = new ArrayList<Block>();
@@ -44,7 +45,12 @@ public class BlockChain {
             genesisTransaction.transactionId = "0";
             genesisTransaction.outputs.add(new TransactionOutput(genesisTransaction.recipient, genesisTransaction.value, genesisTransaction.transactionId));
             UTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0));
-            Block genesisBlock = new Block("0", 1623486340582);
+            
+            /*String timeStr = Long.toString(new Date().getTime());
+            if(timeStr.length() > 9) {
+            	timeStr = timeStr.substring(0, 9);
+            }*/
+            Block genesisBlock = new Block("0", 1623486340);
             genesisBlock.addTransaction(genesisTransaction);
             addBlock(genesisBlock);
 

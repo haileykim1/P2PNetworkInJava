@@ -1,4 +1,8 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
@@ -9,38 +13,65 @@ import org.jsoup.select.Elements;
 public class broker_node extends Thread{
 	
 	static node_info node_storage;
+	static int my_port;
+	static BlockChain chain;
+	ServerSocket serverSocket;
+	Socket socket;
+	ObjectInputStream oin;
 	
-	public void run() {
+	public void run(){
 		System.out.println("Broker Node start...");
-		NetworkEndPoint i = null;
+		
+		
+		
 		try {
-			i = new NetworkEndPoint();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
+
+			serverSocket = new ServerSocket(my_port);
+			socket = serverSocket.accept();
+			oin = new ObjectInputStream(socket.getInputStream());
+			
 			
 			while(true) {
 				
 				//Message format
-				//enrol : type#Membernode_id#Membernode_ip
+				//enrol : MemberInfo
+				//enrolConsortium : ConsotriumInfo
 				//Transaction : type#sender_node_id#receiver_node_id#price
-				//BLOCK : type#
-				//DELETE : type#sender
-				String s = i.wan_receive(7070);
-				System.out.println("--Receive");
-				System.out.println(s);
-				//문자열 parsing하기
-				String[] msg = s.split("#");
-				switch(msg[0]) {
-				case "ENROL":
-					//CONSORTIUM 등록
-					String node_id = msg[1];
-					String node_ip = msg[2];
-					node_storage.enrolConsortium(node_id, node_ip);
-					break;
+				//BLOCK : Block
+				//DELETE : type#sender -> String
+				
+				
+				//object타입 소켓 통신
+				Object data = oin.readObject();
+				
+				if(data instanceof MemberInfo) {
+					System.out.println("Object : Member Enrollment");
+					node_storage.enrol((MemberInfo)data);
+				}
+				else if(data instanceof Block) {
+					System.out.println("Object : Block");
+					//Blockchain에 등록
+					chain.addBlock((Block)data);
+				}
+				else if(data instanceof ConsortiumInfo) {
+					System.out.println("Object : Consortium");
 					
+				}
+				else if(data instanceof Transaction) {
+					System.out.println("Object : Transaction");
+				}
+				else if(data instanceof String) {
+					System.out.println("Object : String -> DELETE");
+					node_storage.delete((String)data);
+				}
+				else {
+					System.out.println("Received Object Unknown");
+				}
+				
+					
+				/*
+				
+				
 				case "TRANSACTION":
 					//해당 string 분석해서 맞는 컨소시움에 보내주기
 					//해당 컨소시움으로 보내주고 Consortium node에서 받아서 찾고 금액 반영
@@ -67,27 +98,33 @@ public class broker_node extends Thread{
 					}
 					
 					break;
-				case "BLOCK":
-					//block chain에 등록
-					//super.chain.add_block();
-					break;
-				case "DELETE":
-					node_id = msg[1];
-					node_storage.delete(node_id);
-					
 				default :
 					System.out.println("brokernode : Error : String Error");
-				}
+				}*/	
+				
+					
 			}
+			
+			
+			
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
 	//broker_node를 생성했을 때부터 local message 대기
-	broker_node(node_info node_storage) {
+	broker_node(node_info node_storage, int my_port, BlockChain chain) {
 		this.node_storage = node_storage;
+		this.my_port = my_port;
+		this.chain = chain;
 		this.start();
+	}
+	
+	@Override
+	protected void finalize() throws Throwable{
+		oin.close();
+		socket.close();
+		serverSocket.close();
 	}
 	
 	public String find_MyWanIP() {
@@ -112,5 +149,8 @@ public class broker_node extends Thread{
 		
 		return MyWanIP;
 	}
+	
+	
+	
 	
 }
