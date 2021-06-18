@@ -40,13 +40,11 @@ public class BlockChain {
             PrivateKey privateKey2 = keyPair.getPrivate();
             PublicKey publicKey2 = keyPair.getPublic();
 
-            genesisTransaction = new Transaction(publicKey, publicKey2, 100f, null);
+            genesisTransaction = new Transaction(publicKey, publicKey2, 10f, null);
             genesisTransaction.generateSignature(privateKey);
             genesisTransaction.transactionId = "0";
-            for(int i=0; i<10; i++){
-                genesisTransaction.outputs.add(new TransactionOutput(genesisTransaction.recipient, genesisTransaction.value, genesisTransaction.transactionId));
-                UTXOs.put(genesisTransaction.outputs.get(i).id, genesisTransaction.outputs.get(i));
-            }
+            genesisTransaction.outputs.add(new TransactionOutput(genesisTransaction.recipient, genesisTransaction.value, genesisTransaction.transactionId));
+            UTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0));
             
             /*String timeStr = Long.toString(new Date().getTime());
             if(timeStr.length() > 9) {
@@ -54,6 +52,7 @@ public class BlockChain {
             }*/
             Block genesisBlock = new Block("0", 1623486340);
             genesisBlock.addTransaction(genesisTransaction);
+            genesisBlock.mineBlock(difficulty);
             addBlock(genesisBlock);
 
         }catch(Exception e){
