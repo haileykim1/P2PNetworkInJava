@@ -107,7 +107,12 @@ public class broker_node extends Thread implements Serializable{
 						//占쏙옙占쏙옙占� 占싹쇽옙占실몌옙 占쏙옙占쏙옙 占쌍깍옙
 
 						if(chain.queue.get(chain.queuePos).add_transaction_num == 4) {
-							oout.writeObject(chain.queue.get(chain.queuePos));
+							Block block = new Block(chain.getPreviousHash());
+							block.transactions = chain.queue.get(chain.queuePos).transactions;
+							block.hash = block.calculateHash();
+							block.add_transaction_num = 4;
+							
+							oout.writeObject(block);
 							chain.queuePos++;
 						} else {
 							oout.writeObject(false);

@@ -24,6 +24,10 @@ public class Block implements Serializable{
 		add_transaction_num = 0;
 	}
 	
+	public Block() {
+		add_transaction_num = 0;
+	}
+	
 	//Calculate new hash based on blocks contents
 	public String calculateHash() {
 		String calculatedhash = StringUtil.applySha256( 
