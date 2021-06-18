@@ -144,6 +144,9 @@ public class BlockChain {
         blockchain.add(newBlock);
     }
 
+    public static String getPreviousHash(){
+        return blockchain.get(-1).hash;
+    }
     public static void setDifficulty(int difficulty){
         difficulty = difficulty;
     }
