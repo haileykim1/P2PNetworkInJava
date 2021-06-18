@@ -7,6 +7,7 @@ public class Consortium_node{
 	static node_info node_storage;
 	//컨소시엄이름 입력 ->이걸로 멤버노드Id 정해짐 ex)soyang1 soyang2 soyang3...
 	static String consortiumName = "";
+	static int myPortNum;
 
 	
 	public static void main(String[] args) throws Exception{
@@ -18,7 +19,7 @@ public class Consortium_node{
 		BlockChain chain = new BlockChain();
 		
 		System.out.println(">> Enter your Port Number");
-		int myPortNum = Integer.parseInt(bufferedReader.readLine());
+		myPortNum = Integer.parseInt(bufferedReader.readLine());
 
 		//broker node용 port 번호는 my_port + 1
 		broker_node bk_node = new broker_node(node_storage, myPortNum + 1, chain, consortiumName);
@@ -43,7 +44,8 @@ public class Consortium_node{
 			Socket socket = null;
 			try {
 				socket = new Socket(peers[i], 30001);
-				new PeerThread(socket, peers[i]).start();
+				new PeerThread(socket, peers[i],node_storage, myPortNum + 1).start();
+				
 			} catch(Exception e) {
 				if(socket != null)
 					socket.close();

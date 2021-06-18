@@ -75,6 +75,7 @@ public class broker_node extends Thread{
 					//받은 Transaction 검증하는 부분
 					if(tr.processTransaction() == false) {
 						System.err.println("Broker Node : Error : transaction can not verify");
+						oout.writeObject(false);
 					}
 					else {
 						
@@ -98,7 +99,7 @@ public class broker_node extends Thread{
 							i.object_send(tr, my_port);		
 						}
 					
-						
+						oout.writeObject(true);
 					}
 				}
 				else if(data instanceof String) {

@@ -78,6 +78,37 @@ public class MemberNode {
 		}
 		
 	}
+	
+	
+	//Transaction 보내는 함수 - 활용안했습니다! 활용할 부분에 사용하면 될듯!
+	private static boolean send_Transaction(float value) {
+		try {
+			consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
+			ObjectOutputStream out = new ObjectOutputStream(consortiumSocket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(consortiumSocket.getInputStream());
+			
+			Transaction tr = wallet.sendFunds(wallet.publicKey, value);
+			
+			out.writeObject(tr);
+			
+			return (boolean)in.readObject();
+			
+		}catch(Exception e) {
+			System.out.println(e);
+		}finally {
+			try {
+				
+				consortiumSocket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return false;
+	}
+
 	private static String getID() {
 		String ret = "";
 		try {

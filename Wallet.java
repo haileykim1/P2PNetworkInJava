@@ -42,7 +42,7 @@ public class Wallet {
 	}
 
 	public float getBalance() {
-		float total = 0;
+		float total = 10;
 		for (Map.Entry<String, TransactionOutput> item: BlockChain.UTXOs.entrySet()){
 			TransactionOutput UTXO = item.getValue();
 			if(UTXO.isMine(publicKey)) { //if output belongs to me ( if coins belong to me )
