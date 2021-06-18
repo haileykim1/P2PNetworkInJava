@@ -21,7 +21,7 @@ public class Consortium_node{
 		int myPortNum = Integer.parseInt(bufferedReader.readLine());
 
 		//broker node용 port 번호는 my_port + 1
-		broker_node bk_node = new broker_node(node_storage, myPortNum + 1, chain);
+		broker_node bk_node = new broker_node(node_storage, myPortNum + 1, chain, consortiumName);
 		ServerThread serverThread = new ServerThread(myPortNum);
 		
 		serverThread.start();
@@ -78,5 +78,9 @@ public class Consortium_node{
 		}catch(Exception e) {
 			
 		}
+	}
+	
+	public String getConsortiumName() {
+		return consortiumName;
 	}
 }

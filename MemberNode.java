@@ -25,8 +25,7 @@ public class MemberNode {
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 			//ID등록
-			System.out.println(">> Enter your ID");
-			ID = bufferedReader.readLine();
+			ID = getID();
 			wallet = new Wallet(ID);
 			memberInfo = new MemberInfo(wallet);
 			memberInfo.setId(ID);
@@ -79,7 +78,32 @@ public class MemberNode {
 		}
 		
 	}
-	
+	private static String getID() {
+		String ret = "";
+		try {
+			consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
+			ObjectOutputStream out = new ObjectOutputStream(consortiumSocket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(consortiumSocket.getInputStream());
+			
+			out.writeObject("ID");
+			
+			
+			ret = (String)in.readObject();
+			
+		}catch(Exception e) {
+			System.out.println(e);
+		}finally {
+			try {
+				
+				consortiumSocket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return ret;
+		
+	}
 	private static String getPrevHash() {
 		String ret = "";
 		
