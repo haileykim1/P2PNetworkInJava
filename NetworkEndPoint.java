@@ -2,6 +2,8 @@
 
 import java.net.*;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 
@@ -30,20 +32,19 @@ public class NetworkEndPoint {
 		IP = ip;
 	}
 	
-	public String msg_receive(int r_port) {
+	private void msg_receive() {
 		
 		try {
 			
 			while(true) {
 
 				System.out.println("--Receive");
-				String s = wan_receive(r_port);
-				return s;
+				String s = wan_receive(rcv_port);
+				System.out.println(s);
 			}
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
-		return "";
 	}
 	
 	public void set_IP(String s) {
@@ -62,6 +63,7 @@ public class NetworkEndPoint {
 		}
 	}
 	
+	@SuppressWarnings("finally")
 	public static String wan_receive(int port) throws Exception {
 			String msg = null;
 			ServerSocket serverSocket = null;
@@ -105,6 +107,54 @@ public class NetworkEndPoint {
 		}
 		finally {
 			try {
+			socket.close();
+			} catch (Exception e) {
+				
+			}
+		}
+	}
+	
+	@SuppressWarnings("finally")
+	public static Object object_receive(int port) throws Exception {
+		Object o = null;
+		ServerSocket serverSocket = null;
+		Socket socket = null;
+		ObjectInputStream in = null;
+		try {
+			serverSocket = new ServerSocket(port);
+			socket = serverSocket.accept();
+			in = new ObjectInputStream(socket.getInputStream());
+			o = in.readObject();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+				socket.close();
+				serverSocket.close();
+				
+			} catch (Exception e) {
+			}
+			return o;
+		}
+	}
+	
+	public static void object_send(Object o, int port) throws Exception {
+		Socket socket = null;
+		ObjectOutputStream out = null;
+		try {
+			socket = new Socket(IP, port);
+			out = new ObjectOutputStream(socket.getOutputStream());
+			
+			out.writeObject(o);
+			System.out.println("Socket : " + socket.getInputStream());
+			
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+			out.flush();
 			socket.close();
 			} catch (Exception e) {
 				
