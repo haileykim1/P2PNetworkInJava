@@ -47,7 +47,7 @@ public class Consortium_node{
 			Socket socket = null;
 			try {
 				socket = new Socket(peers[i], 30001);
-				new PeerThread(socket, peers[i],node_storage, myPortNum + 1).start();
+				new PeerThread(socket, peers[i],node_storage, myPortNum).start();
 				
 			} catch(Exception e) {
 				if(socket != null)
@@ -59,8 +59,8 @@ public class Consortium_node{
 			}
 		}
 		communicate(bufferedReader, serverThread);
-
 	}
+
 	public void communicate(BufferedReader bufferedReader, ServerThread serverThread) {
 		//msg snd interface
 		System.out.println("communicate");
