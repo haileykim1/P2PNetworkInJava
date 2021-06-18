@@ -15,6 +15,7 @@ public class Transaction {
 	private static int sequence = 0; //A rough count of how many transactions have been generated
 	public String sender_id;
 	public String recipient_id;
+	
 	// Constructor:
 	public Transaction(PublicKey from, PublicKey to, float value,  ArrayList<TransactionInput> inputs) {
 		this.sender = from;

@@ -66,8 +66,8 @@ public class MemberNode implements Serializable{
 				
 				//이전 해시 값
 				String prevHash = getPrevHash();
-<<<<<<< HEAD
-				int difficulty = 3;
+
+				
 				
 				//Consortium으로부터 완성된 블록값 받아옴.
 				consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
@@ -80,11 +80,8 @@ public class MemberNode implements Serializable{
 				}
 					
 				Block block = (Block)in.readObject();
-				
-=======
+
 				int difficulty = 4;
-				Block block = new Block(prevHash);
->>>>>>> 85cbf2f0ecee374102b6ec59044b301e4276b8bb
 				block.mineBlock(difficulty);
 				
 				

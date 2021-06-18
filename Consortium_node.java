@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.Date;
 
 
 public class Consortium_node{
@@ -10,7 +11,8 @@ public class Consortium_node{
 	static int myPortNum;
 	static BlockChain chain;
 	static broker_node bk_node;
-
+	static ServerThread serverThread;
+	
 	
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
@@ -25,7 +27,7 @@ public class Consortium_node{
 
 		//broker node용 port 번호는 my_port + 1
 		bk_node = new broker_node(node_storage, myPortNum + 1, chain, consortiumName);
-		ServerThread serverThread = new ServerThread(myPortNum);
+		serverThread = new ServerThread(myPortNum);
 		bk_node.serverThread = serverThread;
 		
 		serverThread.start();
@@ -47,7 +49,11 @@ public class Consortium_node{
 			Socket socket = null;
 			try {
 				socket = new Socket(peers[i], 30001);
+<<<<<<< HEAD
 				new PeerThread(socket, peers[i],node_storage, myPortNum).start();
+=======
+				new PeerThread(socket, peers[i],myPortNum, chain).start();
+>>>>>>> bb610437cce899f0d5001d285346e95c4d65565a
 				
 			} catch(Exception e) {
 				if(socket != null)
@@ -88,4 +94,32 @@ public class Consortium_node{
 	public String getConsortiumName() {
 		return consortiumName;
 	}
+	
+	public void P2PTransaction(Transaction transaction) {
+		Date date = new Date();
+		//0 : 소양, 1 : 희을, 2 : 예인
+		int myNum = 0;
+		int consortiumNum = 3;
+		
+		while(true) {
+			int second = (int) ((date.getTime() / 10) % consortiumNum);
+			Block block = chain.queue.get(chain.queue.size() - 1);
+			if(second == myNum) {
+				//Peer에게 transaction 전달
+				serverThread.sendMessage(transaction);
+				//내 블럭에 transaction 등록
+				if(block.add_transaction_num == 4) {
+					chain.queue.add(new Block(chain.getPreviousHash()));
+					chain.queue.get(chain.queue.size() - 1).addTransaction(transaction);
+				}else {
+					block.addTransaction(transaction);
+				}
+				System.out.println("Transaction Added in Block!");
+				break;
+			}
+		}
+		
+		
+	}
+	
 }

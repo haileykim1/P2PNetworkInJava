@@ -9,6 +9,7 @@ public class Block implements Serializable{
 	public ArrayList<Transaction> transactions = new ArrayList<Transaction>(); //our data will be a simple message.
 	public long timeStamp; //as number of milliseconds since 1/1/1970.
 	public int nonce;
+	public int add_transaction_num;
 	
 	//Block Constructor.
 	public Block (String previousHash, long time){ //only used for genesis block
@@ -20,6 +21,7 @@ public class Block implements Serializable{
 		this.previousHash = previousHash;
 		this.timeStamp = new Date().getTime();
 		this.hash = calculateHash(); //Making sure we do this after we set the other values.
+		add_transaction_num = 0;
 	}
 	
 	//Calculate new hash based on blocks contents
@@ -49,6 +51,7 @@ public class Block implements Serializable{
 		//process transaction and check if valid, unless block is genesis block then ignore.
 		if(transaction == null) return false;		
 		if((!"0".equals(previousHash))) {
+			add_transaction_num += 1;
 			if((transaction.processTransaction() != true)) {
 				System.out.println("Transaction failed to process. Discarded.");
 				return false;
