@@ -117,9 +117,10 @@ public class broker_node extends Thread implements Serializable{
 						oout.writeObject((String)(consortiumName + (++cnt)));
 					}else if(data.equals("BLOCK")) {
 						//블록이 완성되면 조건 넣기
-						Block block = new Block(chain.getPreviousHash());
-						if(block.nonce == 4) {
-							oout.writeObject(block);
+						
+						if(chain.queue.get(chain.queuePos).add_transaction_num == 4) {
+							oout.writeObject(chain.queue.get(chain.queuePos));
+							chain.queuePos++;
 						} else {
 							oout.writeObject(false);
 						}
