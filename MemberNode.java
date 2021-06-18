@@ -65,13 +65,26 @@ public class MemberNode implements Serializable{
 				//이전 해시 값
 				String prevHash = getPrevHash();
 				int difficulty = 3;
-				Block block = new Block(prevHash);
+				
+				//Consortium으로부터 완성된 블록값 받아옴.
+				consortiumSocket = new Socket(memberInfo.getConsortiumIp(), memberInfo.getConsortiumPort());
+				ObjectOutputStream out = new ObjectOutputStream(consortiumSocket.getOutputStream());
+				ObjectInputStream in = new ObjectInputStream(consortiumSocket.getInputStream());
+				
+				out.writeObject("BLOCK");
+				if(in.readObject() instanceof Boolean) {
+					continue;
+				}
+					
+				Block block = (Block)in.readObject();
+				
 				block.mineBlock(difficulty);
 				
 				
 				//채굴 완료 후 Consortium node(broker node)에 등록
 				//블록 채굴 시 오래걸릴 수 있으므로 등록 시만 소켓 열었다 닫기
 				boolean isBlockEnrolled = new MemberNode().EnrolBlock(block);
+				
 				if(isBlockEnrolled) {
 					System.out.println("Block Successfully Enrolled!");
 				}else {
