@@ -3,7 +3,9 @@ import java.util.HashMap;
 public class node_info {
 	//id를 넣으면 ip를 반환
 	static HashMap<String,String> node_list = new HashMap();
-	
+	//Member
+	static HashMap<MemberInfo,String> memberToId = new HashMap();
+	static HashMap<String, MemberInfo> idToMember = new HashMap();
 			
 	node_info() {
 		
