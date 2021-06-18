@@ -26,6 +26,7 @@ public class Consortium_node{
 		//broker node용 port 번호는 my_port + 1
 		bk_node = new broker_node(node_storage, myPortNum + 1, chain, consortiumName);
 		ServerThread serverThread = new ServerThread(myPortNum);
+		bk_node.serverThread = serverThread;
 		
 		serverThread.start();
 		

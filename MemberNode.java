@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.Security;
 
 public class MemberNode implements Serializable{
 	//private Block block;
@@ -17,10 +18,12 @@ public class MemberNode implements Serializable{
 	private static ServerSocket serverSocket = null;
 	private static Socket consortiumSocket = null;
 	private static String ID = null;
-	
+	private static TransactionThread transactionThread;
 	
 	
 	public static void main(String[] args) {
+
+    	Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
 		System.out.println("Starting MEMBER NODE...");
 		try {
@@ -53,6 +56,8 @@ public class MemberNode implements Serializable{
 				System.out.println("MemberNode Enrollment Failed!");
 			}
 			
+			transactionThread = new TransactionThread(memberInfo);
+			transactionThread.start();
 			while(flag) {
 
 				//Block 채굴
@@ -83,6 +88,9 @@ public class MemberNode implements Serializable{
 	}
 	
 	
+	
+
+
 	//Transaction 보내는 함수 - 활용안했습니다! 활용할 부분에 사용하면 될듯!
 	private static boolean send_Transaction(float value) {
 		try {
@@ -219,3 +227,4 @@ public class MemberNode implements Serializable{
 	
 	
 }
+
