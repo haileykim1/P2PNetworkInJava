@@ -16,10 +16,13 @@ public class BlockChain {
     public static float minimumTransaction = 0.1f;
     public static int difficulty = 3;
     public static Transaction genesisTransaction;
+    
 
 
     public BlockChain(){
         try{
+        	Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        	
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDSA","BC");
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             ECGenParameterSpec ecSpec = new ECGenParameterSpec("prime192v1");
