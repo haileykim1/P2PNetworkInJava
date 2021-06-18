@@ -38,6 +38,10 @@ public class MemberInfo implements Serializable{
 		return consortiumPort;
 	}
 	
+	public Wallet getWallet() {
+		return wallet;
+	}
+	
 	//필요하면 Wallet getter더 구현하기
 	
 	public void setId(String id) {

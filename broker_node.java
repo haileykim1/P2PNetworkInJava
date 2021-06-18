@@ -45,7 +45,7 @@ public class broker_node extends Thread implements Serializable{
 				//DELETE : type#sender -> String
 				
 				
-				//object타입 소켓 통신
+				//object���엯 �냼耳� �넻�떊
 				Object data = oin.readObject();
 				
 				if(data instanceof MemberInfo) {
@@ -55,7 +55,7 @@ public class broker_node extends Thread implements Serializable{
 				}
 				else if(data instanceof Block) {
 					System.out.println("Object : Block");
-					//Blockchain에 등록
+					//Blockchain�뿉 �벑濡�
 					
 					oout.writeObject(chain.addBlock((Block)data));
 				}
@@ -65,13 +65,13 @@ public class broker_node extends Thread implements Serializable{
 					System.out.println("Object : TransactionInfo");
 					
 					//inner
-					//public key를 가져오면 Transaction을 생성하고
+					//public key瑜� 媛��졇�삤硫� Transaction�쓣 �깮�꽦�븯怨�
 					TransactionInfo info = (TransactionInfo) data;
 					
-					//트랜잭션 info 보내기
+					//�듃�옖�옲�뀡 info 蹂대궡湲�
 					serverThread.sendMessage(info);
 					
-					//node_info에 있는 Membernode의 값이 null이 아니라면, 즉, 나의 컨소시움에 속해 있는 MemberNode에 Send를 하는 경우
+					//node_info�뿉 �엳�뒗 Membernode�쓽 媛믪씠 null�씠 �븘�땲�씪硫�, 利�, �굹�쓽 而⑥냼�떆���뿉 �냽�빐 �엳�뒗 MemberNode�뿉 Send瑜� �븯�뒗 寃쎌슦
 					MemberInfo receiver;
 					if((node_storage.select(info.getRcvId())) != null) {
 						receiver = node_storage.node_list.get(info.getRcvId());
@@ -85,7 +85,7 @@ public class broker_node extends Thread implements Serializable{
 					NetworkEndPoint i = new NetworkEndPoint();
 					Transaction tr = (Transaction) data;
 					String receive_node = node_storage.select(tr.recipient_id);
-					//받은 Transaction 검증하는 부분
+					//諛쏆� Transaction 寃�利앺븯�뒗 遺�遺�
 					if(tr.processTransaction() == false) {
 						System.err.println("Broker Node : Error : transaction can not verify");
 						oout.writeObject(false);
@@ -93,8 +93,8 @@ public class broker_node extends Thread implements Serializable{
 					else {
 
 						
-						//보내는 부분(나에게 해당 member가 있던 없던 다 보내어 block에 기록하여야하므로 보냄
-						//Consortium 노드에 구현
+						//蹂대궡�뒗 遺�遺�(�굹�뿉寃� �빐�떦 member媛� �엳�뜕 �뾾�뜕 �떎 蹂대궡�뼱 block�뿉 湲곕줉�븯�뿬�빞�븯誘�濡� 蹂대깂
+						//Consortium �끂�뱶�뿉 援ы쁽
 						//Outer
 							//String[] consortium_ip = {i.HeeEul, i.YeIn, i.SoYang};
 							//String MyWanIP = find_MyWanIP();
@@ -108,8 +108,8 @@ public class broker_node extends Thread implements Serializable{
 							}*/
 							
 							serverThread.sendMessage(tr);
-						//receipent 측에서 자신에게 보내진 transaction인지 아닌지 확인한 후, 맞다면 지갑에 반영한 후 block에 기록, 아니라면 그냥 블록에 기록
-						//이건 membernode 쪽에 message 받기 해주어야 함.
+						//receipent 痢≪뿉�꽌 �옄�떊�뿉寃� 蹂대궡吏� transaction�씤吏� �븘�땶吏� �솗�씤�븳 �썑, 留욌떎硫� 吏�媛묒뿉 諛섏쁺�븳 �썑 block�뿉 湲곕줉, �븘�땲�씪硫� 洹몃깷 釉붾줉�뿉 湲곕줉
+						//�씠嫄� membernode 履쎌뿉 message 諛쏄린 �빐二쇱뼱�빞 �븿.
 					
 						oout.writeObject(true);
 					}
@@ -123,18 +123,11 @@ public class broker_node extends Thread implements Serializable{
 						System.out.println("Membernode needs ID value");
 						oout.writeObject((String)(consortiumName + (++cnt)));
 					}else if(data.equals("BLOCK")) {
-<<<<<<< HEAD
-						//블록이 완성되면 조건 넣기
-						Block block = new Block(chain.getPreviousHash());
-						if(block.nonce == 4) {
-							oout.writeObject(block);
-=======
-						//����� �ϼ��Ǹ� ���� �ֱ�
+						//占쏙옙占쏙옙占� 占싹쇽옙占실몌옙 占쏙옙占쏙옙 占쌍깍옙
 						
 						if(chain.queue.get(chain.queuePos).add_transaction_num == 4) {
 							oout.writeObject(chain.queue.get(chain.queuePos));
 							chain.queuePos++;
->>>>>>> bb610437cce899f0d5001d285346e95c4d65565a
 						} else {
 							oout.writeObject(false);
 						}
@@ -166,7 +159,7 @@ public class broker_node extends Thread implements Serializable{
 		}
 	}
 	
-	//broker_node를 생성했을 때부터 local message 대기
+	//broker_node瑜� �깮�꽦�뻽�쓣 �븣遺��꽣 local message ��湲�
 	broker_node(node_info node_storage, int my_port, BlockChain chain, String name) {
 		this.node_storage = node_storage;
 		this.my_port = my_port;
