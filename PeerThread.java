@@ -12,13 +12,13 @@ public class PeerThread extends Thread{
 	private ObjectInputStream oin;
 	private node_info node_storage;
 	private int my_port;
-	public PeerThread(Socket socket,String ipStr, node_info storage, int portnum) throws IOException{
+	private BlockChain chain;
+	public PeerThread(Socket socket,String ipStr, int portnum, BlockChain chain) throws IOException{
 		//bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		oin = new ObjectInputStream(socket.getInputStream());
 		this.ipStr = ipStr;
-		this.node_storage = storage;
 		this.my_port = portnum;
-		
+		this.chain = chain;
 	}
 	
 	public void run() {
@@ -45,12 +45,14 @@ public class PeerThread extends Thread{
 				Object data = oin.readObject();
 				if(data instanceof Transaction) {
 					Transaction tr = (Transaction) data;
-					Iterator<String> keys = node_storage.node_list.keySet().iterator();
-					while(keys.hasNext()) {
-						String key = keys.next();
-						i.set_IP(node_storage.select(key));
-						i.object_send(tr, my_port);		
+					Block block = chain.queue.get(chain.queue.size() - 1);
+					if(block.add_transaction_num == 4) {
+						chain.queue.add(new Block(chain.getPreviousHash()));
+						chain.queue.get(chain.queue.size() - 1).addTransaction(tr);
+					}else {
+						block.addTransaction(tr);
 					}
+					System.out.println("Transaction Added in Block!");
 				}
 			}
 			catch(Exception e) {

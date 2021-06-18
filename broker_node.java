@@ -126,10 +126,18 @@ public class broker_node extends Thread implements Serializable{
 						System.out.println("Membernode needs ID value");
 						oout.writeObject((String)(consortiumName + (++cnt)));
 					}else if(data.equals("BLOCK")) {
+<<<<<<< HEAD
 						//ë¸”ë¡ì´ ì™„ì„±ë˜ë©´ ì¡°ê±´ ë„£ê¸°
 						Block block = new Block(chain.getPreviousHash());
 						if(block.nonce == 4) {
 							oout.writeObject(block);
+=======
+						//ºí·ÏÀÌ ¿Ï¼ºµÇ¸é Á¶°Ç ³Ö±â
+						
+						if(chain.queue.get(chain.queuePos).add_transaction_num == 4) {
+							oout.writeObject(chain.queue.get(chain.queuePos));
+							chain.queuePos++;
+>>>>>>> bb610437cce899f0d5001d285346e95c4d65565a
 						} else {
 							oout.writeObject(false);
 						}

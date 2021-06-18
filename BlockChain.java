@@ -14,8 +14,13 @@ public class BlockChain {
     public static ArrayList<Block> blockchain = new ArrayList<Block>();
     public static HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>();
     public static float minimumTransaction = 0.1f;
-    public static int difficulty = 3;
+    public static int difficulty = 4;
     public static Transaction genesisTransaction;
+    public static ArrayList<Block> queue = new ArrayList<Block>();
+    //pos번째 queue는 채굴되어야하는 대상이다.
+    public static int queuePos = 0;
+    
+    
     
 
 
@@ -160,5 +165,7 @@ public class BlockChain {
     public static void setDifficulty(int difficulty){
         difficulty = difficulty;
     }
+    
+    
 
 }
