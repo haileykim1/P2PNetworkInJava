@@ -6,9 +6,9 @@
 - Member Node : 코인 채굴, 트랜잭션 발생, 블록에 트랜잭션 기록 등
 - Consortium Node : BlockChain, Broker Node관리, Consortium간 P2P 통신 담당.
  
-[communication]
-Consortium Node - Member Node : Server-Client 구조
-Consortium Node - Consortium Node : P2P 
+[communication]    
+Consortium Node - Member Node : Server-Client 구조    
+Consortium Node - Consortium Node : P2P     
 
 ![그림1](https://user-images.githubusercontent.com/49053341/137587384-9dbae3f7-da12-4320-9b25-5bf1a09b70a0.png)
 
