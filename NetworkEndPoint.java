@@ -15,9 +15,9 @@ import java.io.OutputStream;
 public class NetworkEndPoint {
 	//return 형식은 보낸 IP/PORT/DATA
 	
-	static String HeeEul = "175.208.245.129";
-	static String YeIn = "221.167.222.167";
-	static String SoYang = "59.13.228.230";
+	static String HeeEul = "---.---.---.---";
+	static String YeIn = "---.---.---.---";
+	static String SoYang = "--.---.---.---";
 	
 	static String IP;
 	static int snd_port = 30001;
