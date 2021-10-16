@@ -1,2 +1,2 @@
 # P2PNetworkInJava
-2021 Konkuk University Distributed System Computing Project
+2021 University Distributed System Computing Project
